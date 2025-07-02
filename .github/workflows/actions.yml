@@ -1,0 +1,19 @@
+name: CI/CD - Food Campus
+
+on: [pull_request, push]
+
+jobs:
+  dependencies:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Instalar dependências
+        run: npm install

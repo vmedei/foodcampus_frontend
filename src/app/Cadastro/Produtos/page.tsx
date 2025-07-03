@@ -9,7 +9,10 @@ function CadastroProdutos() {
         <section className='flex flex-col gap-6'>
             <h2 className='text-black text-3xl font-bold'>Cadastro de produtos</h2>
             <form className='flex flex-col gap-7'>
-                <Input type='text' placeholder='Nome do produto' />
+                <div className='flex flex-col gap-1'>
+                    <Label>Nome</Label>
+                    <Input type='text' />
+                </div>
                 <div className='grid grid-cols-2 gap-4'>
                     <div className='flex flex-col gap-1'>
                         <Label>Valor do produto</Label>
@@ -17,10 +20,13 @@ function CadastroProdutos() {
                     </div>
                     <div className='flex flex-col gap-1'>
                         <Label>Imagem do produto</Label>
-                        <Input type='file' placeholder='Imagem do produto' />
+                        <Input type='file' placeholder='Imagem do produto' className='cursor-pointer' />
                     </div>
                 </div>
-                <Textarea placeholder='Descrição' className='h-[8em]'></Textarea>
+                <div className='flex flex-col gap-1'>
+                    <Label>Descrição</Label>
+                    <Textarea className='h-[8em]'></Textarea>
+                </div>
                 <div className='text-end'>
                     <Button className='cursor-pointer' size={'lg'}>Confimar</Button>
                 </div>

@@ -1,13 +1,16 @@
 'use client'
 
-import { Menu, X } from 'lucide-react'
+import { Menu, User, X } from 'lucide-react'
+import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React, { useState } from 'react'
+import AvatarHeader from './AvatarHeader'
 
 function Header() {
     const [isOpen, setIsOpen] = useState(false)
     const path = usePathname()
+    const { data: session } = useSession()
 
     return (
         <header className="w-full px-6 py-10 bg-[#075933] relative z-50">
@@ -19,12 +22,16 @@ function Header() {
                     </Link>
                 </h1>
 
-                <button
-                    className="cursor-pointer text-white bg-transparent"
-                    onClick={() => setIsOpen(true)}
-                >
-                    <Menu size={30} />
-                </button>
+                <div className='flex items-center gap-2'>
+                    <button
+                        className="cursor-pointer text-white bg-transparent"
+                        onClick={() => setIsOpen(true)}
+                    >
+                        <Menu size={30} />
+                    </button>
+
+                    <AvatarHeader />
+                </div>
             </div>
 
 
@@ -79,7 +86,9 @@ function Header() {
                         </Link>
                     </li>
                 </ul>
+
             </div>
+
         </header>
     )
 }

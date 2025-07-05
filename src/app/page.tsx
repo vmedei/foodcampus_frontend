@@ -1,9 +1,14 @@
-import Image from "next/image";
+import { signIn } from "@/auth";
 
 export default function Home() {
   return (
-    <div>
-      <h1>HOME - General</h1>
-    </div>
+    <form
+      action={async () => {
+        "use server"
+        await signIn()
+      }}
+    >
+      <button type="submit">Signin with GitHub</button>
+    </form>
   );
 }

@@ -1,18 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Open_Sans } from "next/font/google";
 import "./globals.css";
 import Wrapper from "@/components/Wrapper";
-import Header from "@/components/Header";
+import Header from "@/components/header/Header";
+import { SessionProvider } from "next-auth/react";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const Open = Open_Sans({
+  subsets: ['latin']
+})
 
 export const metadata: Metadata = {
   title: "Food Campus",
@@ -27,12 +22,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${Open.className} antialiased`}
       >
-        <Header />
-        <Wrapper>
-          {children}
-        </Wrapper>
+        <SessionProvider>
+          <Header />
+          <Wrapper>
+            {children}
+          </Wrapper>
+        </SessionProvider>
       </body>
     </html>
   );

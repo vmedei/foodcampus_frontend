@@ -4,6 +4,9 @@ import { Menu, X } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React, { useState } from 'react'
+import AvatarHeader from './AvatarHeader'
+import Image from 'next/image'
+
 
 function Header() {
     const [isOpen, setIsOpen] = useState(false)
@@ -19,12 +22,16 @@ function Header() {
                     </Link>
                 </h1>
 
-                <button
-                    className="cursor-pointer text-white bg-transparent"
-                    onClick={() => setIsOpen(true)}
-                >
-                    <Menu size={30} />
-                </button>
+                <div className='flex items-center gap-2'>
+                    <button
+                        className="cursor-pointer text-white bg-transparent"
+                        onClick={() => setIsOpen(true)}
+                    >
+                        <Menu size={32} />
+                    </button>
+
+                    <AvatarHeader />
+                </div>
             </div>
 
 
@@ -79,7 +86,9 @@ function Header() {
                         </Link>
                     </li>
                 </ul>
+
             </div>
+
         </header>
     )
 }

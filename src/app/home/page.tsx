@@ -18,7 +18,7 @@ export default function HomePage() {
     // Loading state
     if (loading) {
         return (
-            <div className="min-h-screen bg-base-200 flex items-center justify-center">
+            <div className="h-full bg-base-200 flex items-center justify-center">
                 <div className="text-center">
                     <span className="loading loading-spinner loading-lg text-primary"></span>
                     <p className="mt-4 text-base-content/70">Carregando...</p>
@@ -30,7 +30,7 @@ export default function HomePage() {
     // Not authenticated
     if (!user) {
         return (
-            <div className="min-h-screen bg-base-200 flex items-center justify-center">
+            <div className="h-full bg-base-200 flex items-center justify-center">
                 <div className="text-center">
                     <h1 className="text-2xl font-bold text-error mb-4">Acesso Negado</h1>
                     <p className="text-base-content/70 mb-6">Você precisa estar logado para acessar esta página.</p>
@@ -53,7 +53,7 @@ export default function HomePage() {
             return <HomeVendedor />
         default:
             return (
-                <div className="min-h-screen bg-base-200 flex items-center justify-center">
+                <div className="h-full bg-base-200 flex items-center justify-center">
                     <div className="text-center">
                         <h1 className="text-2xl font-bold text-error mb-4">Tipo de Usuário Inválido</h1>
                         <p className="text-base-content/70 mb-6">Tipo de usuário não reconhecido: {user.type}</p>

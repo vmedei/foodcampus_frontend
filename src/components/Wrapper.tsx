@@ -4,7 +4,7 @@ interface WrapperProps {
 
 function Wrapper({ children }: WrapperProps) {
     return (
-        <main className="flex-1">
+        <main className="flex-1 overflow-auto">
             {children}
         </main>
     )

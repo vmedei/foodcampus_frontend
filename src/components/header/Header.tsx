@@ -4,7 +4,6 @@ import { Menu, X, User, LayoutDashboard } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import React, { useState } from 'react'
-import Image from 'next/image'
 import { useAuth } from '@/hooks/useAuth'
 
 

@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" data-theme="foodcampus">
       <body
-        className={`${openSans.className} antialiased min-h-screen flex flex-col`}
+        className={`${openSans.className} antialiased flex flex-col h-screen`}
       >
         <Header />
         <Wrapper>

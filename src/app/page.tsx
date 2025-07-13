@@ -33,7 +33,7 @@ export default function Home() {
         }
     }
 
-    return (
+  return (
         <div className="">
 
             <div className="flex flex-col p-10 gap-10 max-w-6xl mx-auto">
@@ -120,7 +120,7 @@ export default function Home() {
                                         <div className="bg-secondary p-2 rounded-full">
                                             <Globe className="h-5 w-5 text-white" />
                                         </div>
-                                        <div>
+    <div>
                                             <h4 className="font-semibold text-base-content">Para a Comunidade</h4>
                                             <p className="text-base-content opacity-70">Criar um ecossistema digital que conecte oferta e demanda</p>
                                         </div>
@@ -354,6 +354,6 @@ export default function Home() {
                     </p>
                 </aside>
             </footer>
-        </div>
-    );
+    </div>
+  );
 }

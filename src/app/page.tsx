@@ -1,18 +1,3 @@
-<<<<<<< Updated upstream
-import { signIn } from "@/auth";
-
-export default function Home() {
-  return (
-    <form
-      action={async () => {
-        "use server"
-        await signIn()
-      }}
-    >
-      <button type="submit">Signin with GitHub</button>
-    </form>
-  );
-=======
 'use client'
 
 import Image from "next/image";
@@ -371,5 +356,4 @@ export default function Home() {
             </footer>
         </div>
     );
->>>>>>> Stashed changes
 }

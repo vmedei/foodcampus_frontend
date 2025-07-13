@@ -3,9 +3,8 @@ import { Open_Sans } from "next/font/google";
 import "./globals.css";
 import Wrapper from "@/components/Wrapper";
 import Header from "@/components/header/Header";
-import { SessionProvider } from "next-auth/react";
 
-const Open = Open_Sans({
+const openSans = Open_Sans({
   subsets: ['latin']
 })
 
@@ -22,18 +21,12 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" data-theme="foodcampus">
       <body
-<<<<<<< Updated upstream
-        className={`${Open.className} antialiased`}
-=======
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
->>>>>>> Stashed changes
+        className={`${openSans.className} antialiased min-h-screen flex flex-col`}
       >
-        <SessionProvider>
-          <Header />
-          <Wrapper>
-            {children}
-          </Wrapper>
-        </SessionProvider>
+        <Header />
+        <Wrapper>
+          {children}
+        </Wrapper>
       </body>
     </html>
   );

@@ -1,17 +1,18 @@
 'use client'
 
-import { Menu, X, User } from 'lucide-react'
+import { Menu, X, User, LayoutDashboard } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import React, { useState } from 'react'
-import AvatarHeader from './AvatarHeader'
 import Image from 'next/image'
+import { useAuth } from '@/hooks/useAuth'
 
 
 function Header() {
     const [isOpen, setIsOpen] = useState(false)
     const path = usePathname()
     const router = useRouter()
+    const { user, logout } = useAuth()
 
     const scrollToSection = (sectionId: string) => {
         const element = document.getElementById(sectionId)
@@ -33,35 +34,23 @@ function Header() {
         setIsOpen(false)
     }
 
+    const handleDashboardClick = () => {
+        router.push('/dashboard')
+        setIsOpen(false)
+    }
+
+    const handleLogoutClick = () => {
+        logout()
+        setIsOpen(false)
+    }
+
     return (
-<<<<<<< Updated upstream:src/components/header/Header.tsx
-        <header className="w-full px-6 py-10 bg-[#075933] relative z-50">
-            <div className="flex items-center justify-between">
-                <h1 className="font-semibold text-white text-3xl cursor-pointer">
-                    <Link href='/'>
-                        <span className="font-bold text-[#F29727]">Food</span>
-                        Campus
-                    </Link>
-                </h1>
-
-                <div className='flex items-center gap-2'>
-                    <button
-                        className="cursor-pointer text-white bg-transparent"
-                        onClick={() => setIsOpen(true)}
-                    >
-                        <Menu size={32} />
-                    </button>
-
-                    <AvatarHeader />
-                </div>
-=======
         <header className="navbar bg-primary text-primary-content sticky top-0 z-50 shadow-lg">
             <div className="navbar-start">
                 <Link href="/" className="btn btn-primary btn-ghost text-xl">
                     <span className="font-bold text-secondary">Food</span>
                     <span className="text-white">Campus</span>
                 </Link>
->>>>>>> Stashed changes:src/components/Header.tsx
             </div>
 
             {/* Desktop Navigation */}
@@ -103,15 +92,44 @@ function Header() {
             </div>
 
             <div className="navbar-end">
-                {/* Desktop Login Button */}
+                {/* Desktop User Menu */}
                 <div className="hidden lg:block">
-                    <button 
-                        className="btn btn-secondary"
-                        onClick={handleLoginClick}
-                    >
-                        <User className="h-4 w-4" />
-                        Login
-                    </button>
+                    {user ? (
+                        <div className="dropdown dropdown-end">
+                            <label tabIndex={0} className="btn btn-secondary">
+                                <User className="h-4 w-4" />
+                                {user.email}
+                            </label>
+                            <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+                                <li>
+                                    <button 
+                                        onClick={handleDashboardClick}
+                                        className="text-base-content hover:bg-primary hover:text-primary-content"
+                                    >
+                                        <LayoutDashboard className="h-4 w-4" />
+                                        Dashboard
+                                    </button>
+                                </li>
+                                <li>
+                                    <button 
+                                        onClick={handleLogoutClick}
+                                        className="text-base-content hover:bg-error hover:text-error-content"
+                                    >
+                                        <X className="h-4 w-4" />
+                                        Sair
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    ) : (
+                        <button 
+                            className="btn btn-secondary"
+                            onClick={handleLoginClick}
+                        >
+                            <User className="h-4 w-4" />
+                            Login
+                        </button>
+                    )}
                 </div>
 
                 {/* Mobile Menu Button */}
@@ -133,19 +151,6 @@ function Header() {
                 />
             )}
 
-<<<<<<< Updated upstream:src/components/header/Header.tsx
-                    <li className={`font-bold text-black text-xl transition-all duration-150 hover:scale-105
-                     ${path == '/Cadastro/Clientes' && 'text-gray-700/60 pointer-events-none'}`}
-                        onClick={() => setIsOpen(false)}>
-                        <Link
-                            href="/Cadastro/Clientes"
-                        >
-                            Cadastro de Clientes
-                        </Link>
-                    </li>
-                </ul>
-
-=======
             {/* Mobile Menu */}
             <div
                 className={`
@@ -205,15 +210,37 @@ function Header() {
 
                     <div className="divider"></div>
 
-                    <button 
-                        className="btn btn-secondary w-full"
-                        onClick={handleLoginClick}
-                    >
-                        <User className="h-4 w-4" />
-                        Login
-                    </button>
+                    {user ? (
+                        <div className="space-y-2">
+                            <div className="p-2 bg-base-200 rounded-lg">
+                                <p className="text-sm text-base-content/70">Logado como</p>
+                                <p className="font-semibold text-primary truncate">{user.email}</p>
+                            </div>
+                            <button 
+                                className="btn btn-primary w-full"
+                                onClick={handleDashboardClick}
+                            >
+                                <LayoutDashboard className="h-4 w-4" />
+                                Dashboard
+                            </button>
+                            <button 
+                                className="btn btn-outline btn-error w-full"
+                                onClick={handleLogoutClick}
+                            >
+                                <X className="h-4 w-4" />
+                                Sair
+                            </button>
+                        </div>
+                    ) : (
+                        <button 
+                            className="btn btn-secondary w-full"
+                            onClick={handleLoginClick}
+                        >
+                            <User className="h-4 w-4" />
+                            Login
+                        </button>
+                    )}
                 </nav>
->>>>>>> Stashed changes:src/components/Header.tsx
             </div>
 
         </header>

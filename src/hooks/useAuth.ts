@@ -74,12 +74,8 @@ export const useAuth = (): AuthState & AuthActions => {
           loading: false
         })
         
-        // Opcional: Redirecionar para dashboard baseado no tipo de usuário
-        if (authData.user.type === 'cliente') {
-          router.push('/dashboard/cliente')
-        } else if (authData.user.type === 'vendedor') {
-          router.push('/dashboard/vendedor')
-        }
+        // Redirecionar para dashboard (a página resolve o tipo automaticamente)
+        router.push('/dashboard')
       } else {
         throw new Error('Resposta inválida do servidor')
       }

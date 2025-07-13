@@ -3,9 +3,9 @@
 import { useAuth } from '@/hooks/useAuth'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
-import { DashboardCliente, DashboardVendedor } from '@/components/dashboard'
+import { HomeCliente, HomeVendedor } from '@/components/home'
 
-export default function DashboardPage() {
+export default function HomePage() {
     const { user, loading } = useAuth()
     const router = useRouter()
 
@@ -21,7 +21,7 @@ export default function DashboardPage() {
             <div className="min-h-screen bg-base-200 flex items-center justify-center">
                 <div className="text-center">
                     <span className="loading loading-spinner loading-lg text-primary"></span>
-                    <p className="mt-4 text-base-content/70">Carregando dashboard...</p>
+                    <p className="mt-4 text-base-content/70">Carregando...</p>
                 </div>
             </div>
         )
@@ -45,12 +45,12 @@ export default function DashboardPage() {
         )
     }
 
-    // Render dashboard based on user type
+    // Render home based on user type
     switch (user.type) {
         case 'cliente':
-            return <DashboardCliente />
+            return <HomeCliente />
         case 'vendedor':
-            return <DashboardVendedor />
+            return <HomeVendedor />
         default:
             return (
                 <div className="min-h-screen bg-base-200 flex items-center justify-center">

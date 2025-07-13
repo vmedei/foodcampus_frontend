@@ -74,8 +74,8 @@ export const useAuth = (): AuthState & AuthActions => {
           loading: false
         })
         
-        // Redirecionar para dashboard (a página resolve o tipo automaticamente)
-        router.push('/dashboard')
+        // Redirecionar para home (a página resolve o tipo automaticamente)
+        router.push('/home')
       } else {
         throw new Error('Resposta inválida do servidor')
       }

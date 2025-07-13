@@ -34,8 +34,8 @@ function Header() {
         setIsOpen(false)
     }
 
-    const handleDashboardClick = () => {
-        router.push('/dashboard')
+    const handleHomeClick = () => {
+        router.push('/home')
         setIsOpen(false)
     }
 
@@ -103,11 +103,11 @@ function Header() {
                             <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
                                 <li>
                                     <button 
-                                        onClick={handleDashboardClick}
+                                        onClick={handleHomeClick}
                                         className="text-base-content hover:bg-primary hover:text-primary-content"
                                     >
                                         <LayoutDashboard className="h-4 w-4" />
-                                        Dashboard
+                                        Home
                                     </button>
                                 </li>
                                 <li>
@@ -218,10 +218,10 @@ function Header() {
                             </div>
                             <button 
                                 className="btn btn-primary w-full"
-                                onClick={handleDashboardClick}
+                                onClick={handleHomeClick}
                             >
                                 <LayoutDashboard className="h-4 w-4" />
-                                Dashboard
+                                Home
                             </button>
                             <button 
                                 className="btn btn-outline btn-error w-full"

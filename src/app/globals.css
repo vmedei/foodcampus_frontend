@@ -1,13 +1,41 @@
 @import "tailwindcss";
-@import "tw-animate-css";
+@plugin "daisyui";
 
-@custom-variant dark (&:is(.dark *));
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+@plugin "daisyui/theme" {
+  name: "foodcampus";
+  default: false;
+  prefersdark: false;
+  color-scheme: "light";
+  --color-base-100: oklch(98% 0.022 95.277);
+  --color-base-200: oklch(96% 0.059 95.617);
+  --color-base-300: oklch(92% 0.12 95.746);
+  --color-base-content: oklch(26% 0.051 172.552);
+  --color-primary: oklch(50% 0.118 165.612);
+  --color-primary-content: oklch(97% 0.021 166.113);
+  --color-secondary: oklch(82% 0.189 84.429);
+  --color-secondary-content: oklch(41% 0.112 45.904);
+  --color-accent: oklch(77% 0.152 181.912);
+  --color-accent-content: oklch(38% 0.063 188.416);
+  --color-neutral: oklch(26% 0.051 172.552);
+  --color-neutral-content: oklch(92% 0.004 286.32);
+  --color-info: oklch(74% 0.16 232.661);
+  --color-info-content: oklch(29% 0.066 243.157);
+  --color-success: oklch(76% 0.177 163.223);
+  --color-success-content: oklch(37% 0.077 168.94);
+  --color-warning: oklch(70% 0.213 47.604);
+  --color-warning-content: oklch(39% 0.141 25.723);
+  --color-error: oklch(63% 0.237 25.331);
+  --color-error-content: oklch(25% 0.092 26.042);
+  --radius-selector: 1rem;
+  --radius-field: 1rem;
+  --radius-box: 1rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
 }
+<<<<<<< Updated upstream
 
 html,
 body {
@@ -137,3 +165,5 @@ body {
     @apply bg-background text-foreground;
   }
 }
+=======
+>>>>>>> Stashed changes

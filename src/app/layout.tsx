@@ -20,9 +20,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="pt-BR" data-theme="foodcampus">
       <body
+<<<<<<< Updated upstream
         className={`${Open.className} antialiased`}
+=======
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
+>>>>>>> Stashed changes
       >
         <SessionProvider>
           <Header />

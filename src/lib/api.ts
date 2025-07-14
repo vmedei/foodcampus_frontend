@@ -44,6 +44,20 @@ export interface CreateSellerRequest {
   user: CreateUserRequest
 }
 
+export interface CreateProductRequest {
+  name: string
+  description: string
+  price: number
+  base64Image: string
+}
+
+export interface ProductResponse {
+  name: string
+  description: string
+  price: number
+  base64Image: string
+}
+
 // Response Types
 export interface UserResponse {
   email: string
@@ -191,6 +205,46 @@ export const sellerAPI = {
     })
     
     return handleResponse<ApiResponse>(response)
+  }
+}
+
+// Cadastro de Produtos
+export const productAPI = {
+  /**
+   * Cadastra um novo produto
+   * @param productData - Dados do produto
+   * @returns Promise com dados do produto criado
+   */
+  create: async (productData: CreateProductRequest): Promise<ApiResponse> => {
+    const token = authUtils.getToken()
+    const response = await fetch(`${API_BASE_URL}${API_VERSION}/products`, {
+      method: 'POST',
+      headers: getHeaders(token || undefined),
+      body: JSON.stringify(productData),
+    })
+    
+    return handleResponse<ApiResponse>(response)
+  },
+
+  /**
+   * Lista todos os produtos ou filtra por vendedor
+   * @param storeCode - Código da loja (opcional)
+   * @returns Promise com lista de produtos
+   */
+  getAll: async (storeCode?: string): Promise<{products: ProductResponse[]}> => {
+    const token = authUtils.getToken()
+    const url = new URL(`${API_BASE_URL}${API_VERSION}/products`)
+    
+    if (storeCode) {
+      url.searchParams.append('storeCode', storeCode)
+    }
+    
+    const response = await fetch(url.toString(), {
+      method: 'GET',
+      headers: getHeaders(token || undefined),
+    })
+    
+    return handleResponse<{products: ProductResponse[]}>(response)
   }
 }
 

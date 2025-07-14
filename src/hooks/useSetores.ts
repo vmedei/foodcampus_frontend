@@ -22,6 +22,14 @@ export interface VendedorAgendado {
     dataFim: string
     status: 'AGENDADO' | 'ATIVO' | 'FINALIZADO' | 'CANCELADO'
     observacoes?: string
+    setor?: {
+        id: number
+        nome: string
+        sigla: string
+        latitude: number
+        longitude: number
+        endereco?: string
+    }
 }
 
 interface AgendamentoRequest {
@@ -85,6 +93,20 @@ export function useSetores() {
         }
     }
 
+    const atualizarStatusAgendamento = async (agendamentoId: number, status: string) => {
+        try {
+            const response = await api.put(`/api/v1/setores/agendamento/${agendamentoId}/status`, { status })
+            return response
+        } catch (err: any) {
+            if (err.response?.status === 400) {
+                throw new Error(err.response.data.message || 'Status inválido')
+            } else if (err.response?.status === 404) {
+                throw new Error('Agendamento não encontrado')
+            }
+            throw new Error('Erro ao atualizar status do agendamento')
+        }
+    }
+
     useEffect(() => {
         carregarSetores()
     }, [])
@@ -96,6 +118,7 @@ export function useSetores() {
         carregarVendedoresPorSetor,
         agendarVendedor,
         carregarMeusAgendamentos,
+        atualizarStatusAgendamento,
         recarregar: carregarSetores
     }
 } 

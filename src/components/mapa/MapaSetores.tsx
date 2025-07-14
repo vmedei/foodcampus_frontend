@@ -192,39 +192,41 @@ export default function MapaSetores({
                 </MapContainer>
 
                 {/* Seletor de setores no canto inferior esquerdo */}
-                <div
-                    className="absolute left-4 bottom-4 z-[1000] bg-base-100 rounded-lg shadow-lg p-2 flex items-center gap-2"
-                    style={{ minWidth: 220 }}
-                >
-                    {mostrarSeletorSetores && !carregandoVendedores ? (
-                        <>
-                            <MapPin className="h-5 w-5 text-primary" />
-                            <select
-                                className="select select-bordered select-sm w-full"
-                                value={setorSelecionado?.id || ''}
-                                onChange={e => {
-                                    const setorId = Number(e.target.value)
-                                    const setor = setoresComVendedores.find(s => s.id === setorId)
-                                    if (setor && onSetorSelecionado) {
-                                        onSetorSelecionado(setor)
-                                    }
-                                }}
-                            >
-                                <option value="">Selecionar setor...</option>
-                                {setoresComVendedores.map(setor => (
-                                    <option key={setor.id} value={setor.id}>
-                                        {setor.sigla} - {setor.descricao}
-                                    </option>
-                                ))}
-                            </select>
-                        </>
-                    ) : (
-                        <>
-                            <span className="loading loading-spinner loading-sm text-primary"></span>
-                            <span className="text-sm font-medium">Carregando vendedores...</span>
-                        </>
-                    )}
-                </div>
+                {mostrarSeletorSetores &&
+                    <div
+                        className="absolute left-4 bottom-4 z-[1000] bg-base-100 rounded-lg shadow-lg p-2 flex items-center gap-2"
+                        style={{ minWidth: 220 }}
+                    >
+                        {!carregandoVendedores ? (
+                            <>
+                                <MapPin className="h-5 w-5 text-primary" />
+                                <select
+                                    className="select select-bordered select-sm w-full"
+                                    value={setorSelecionado?.id || ''}
+                                    onChange={e => {
+                                        const setorId = Number(e.target.value)
+                                        const setor = setoresComVendedores.find(s => s.id === setorId)
+                                        if (setor && onSetorSelecionado) {
+                                            onSetorSelecionado(setor)
+                                        }
+                                    }}
+                                >
+                                    <option value="">Selecionar setor...</option>
+                                    {setoresComVendedores.map(setor => (
+                                        <option key={setor.id} value={setor.id}>
+                                            {setor.sigla} - {setor.descricao}
+                                        </option>
+                                    ))}
+                                </select>
+                            </>
+                        ) : (
+                            <>
+                                <span className="loading loading-spinner loading-sm text-primary"></span>
+                                <span className="text-sm font-medium">Carregando vendedores...</span>
+                            </>
+                        )}
+                    </div>
+                }
             </div>
 
             {/* Overlay para mobile */}
@@ -333,8 +335,8 @@ export default function MapaSetores({
                                                             </p>
                                                         </div>
                                                         <span className={`badge badge-sm shrink-0 ${vendedor.status === 'ATIVO' ? 'badge-success' :
-                                                                vendedor.status === 'AGENDADO' ? 'badge-warning' :
-                                                                    'badge-neutral'
+                                                            vendedor.status === 'AGENDADO' ? 'badge-warning' :
+                                                                'badge-neutral'
                                                             }`}>
                                                             {vendedor.status}
                                                         </span>

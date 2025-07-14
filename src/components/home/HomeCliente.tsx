@@ -1,30 +1,20 @@
 'use client'
 
 import { useAuth } from '@/hooks/useAuth'
-import { User, LogOut, MapPin, Info } from 'lucide-react'
+import { MapPin, Info } from 'lucide-react'
 import { MapaSetores } from '@/components/mapa'
 
 export default function HomeCliente() {
-    const { user, logout } = useAuth()
+    const { user } = useAuth()
 
     return (
         <div className="bg-base-200 min-h-screen">
             <div className="container mx-auto px-4 py-6">
 
                 {/* Header */}
-                <div className="flex justify-between items-center mb-6">
-                    <div>
-                        <h1 className="text-2xl font-bold text-primary">Food Campus - Cliente</h1>
-                        <p className="text-base-content/70">Bem-vindo(a), {user?.email}</p>
-                    </div>
-                    <button
-                        onClick={logout}
-                        className="btn btn-outline btn-error btn-sm"
-                    >
-                        <LogOut className="h-4 w-4" />
-                        Sair
-                    </button>
-                </div>
+                <h1 className="text-3xl font-bold text-primary mb-6">
+                    Bem-vindo(a), {user?.name || user?.email}
+                </h1>
 
                 {/* Mapa Principal */}
                 <div className="card bg-base-100 shadow-lg">

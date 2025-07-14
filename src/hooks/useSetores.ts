@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { api } from '@/lib/api'
 
-interface Setor {
+export interface Setor {
     id: number
     nome: string
     sigla: string
@@ -12,7 +12,7 @@ interface Setor {
     vendedores?: VendedorAgendado[]
 }
 
-interface VendedorAgendado {
+export interface VendedorAgendado {
     agendamentoId: number
     vendedorId: number
     nomeFantasia: string

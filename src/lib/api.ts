@@ -233,7 +233,6 @@ export const productAPI = {
    * @returns Promise com lista de produtos
    */
   getAll: async (storeCode?: string): Promise<{products: ProductResponse[]}> => {
-    const token = authUtils.getToken()
     const url = new URL(`${API_BASE_URL}${API_VERSION}/products`)
     
     if (storeCode) {
@@ -242,7 +241,7 @@ export const productAPI = {
     
     const response = await fetch(url.toString(), {
       method: 'GET',
-      headers: getHeaders(token || undefined),
+      headers: getHeaders(),
     })
     
     return handleResponse<{products: ProductResponse[]}>(response)

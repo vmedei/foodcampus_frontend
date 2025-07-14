@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react'
 import { useSetores, Setor, VendedorAgendado } from '@/hooks/useSetores'
 import { Calendar, Clock, MapPin, Save, AlertCircle, CheckCircle, List, Map, Eye } from 'lucide-react'
-import { MapaSetores } from '../mapa'
-import StatusDropdown from './StatusDropdown'
+import { MapaSetores } from '../../mapa'
+import StatusModal from './StatusModal'
 
 export default function AgendamentoSetor() {
     const { setores, agendarVendedor, carregarMeusAgendamentos, atualizarStatusAgendamento } = useSetores()
@@ -165,7 +165,7 @@ export default function AgendamentoSetor() {
         }
 
         return (
-            <StatusDropdown
+            <StatusModal
                 currentStatus={status}
                 agendamentoId={agendamentoId}
                 onStatusChange={handleAtualizarStatus}
@@ -364,7 +364,7 @@ export default function AgendamentoSetor() {
                 {visualizacao === 'mapa' ? (
                 <MapaSetores
                     largura='100%'
-                    altura='700px'
+                    altura='600px'
                         setorSelecionado={setorSelecionadoMapa}
                         onSetorSelecionado={handleSetorSelecionadoMapa}
                     />

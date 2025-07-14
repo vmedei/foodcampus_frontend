@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { MapPin, Info } from 'lucide-react'
 import { MapaSetores } from '@/components/mapa'
 import { useState } from 'react'
-import { Setor } from '@/hooks/useSetores'
+import { Setor, VendedorAgendado } from '@/hooks/useSetores'
 
 export default function HomeCliente() {
     const { user } = useAuth()
@@ -13,6 +13,11 @@ export default function HomeCliente() {
 
     const handleSetorSelecionado = (setor: Setor) => {
         setSetorSelecionado(setor)
+    }
+
+    const handleVendedorClick = (vendedor: VendedorAgendado) => {
+        // A funcionalidade de visualizar produtos agora é tratada internamente no MapaSetores
+        console.log('Vendedor selecionado:', vendedor)
     }
 
     return (
@@ -38,10 +43,7 @@ export default function HomeCliente() {
                             <MapaSetores
                                 altura="500px"
                                 dataFiltro={new Date().toISOString().split('T')[0]}
-                                onVendedorClick={(vendedor) => {
-                                    // Lógica para fazer reserva - implementar futuramente
-                                    console.log('Vendedor selecionado:', vendedor)
-                                }}
+                                onVendedorClick={handleVendedorClick}
                                 setorSelecionado={setorSelecionado}
                                 onSetorSelecionado={handleSetorSelecionado}
                                 mostrarSeletorSetores={true}
@@ -51,9 +53,12 @@ export default function HomeCliente() {
                         {/* Instruções */}
                         <div className="alert alert-info flex items-center">
                             <Info className="h-5 w-5" />
-                            <h3 className="font-bold">Como usar:</h3>
-                            <div className="text-sm">
-                                Clique nos marcadores dos setores no mapa para ver os vendedores disponíveis em cada localização da UFRN.
+                            <div>
+                                <h3 className="font-bold">Como usar:</h3>
+                                <div className="text-sm">
+                                    Clique nos marcadores dos setores no mapa para ver os vendedores disponíveis. 
+                                    Clique no card de um vendedor para ver seus produtos.
+                                </div>
                             </div>
                         </div>
                     </div>

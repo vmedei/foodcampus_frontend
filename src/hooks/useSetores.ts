@@ -22,6 +22,7 @@ export interface VendedorAgendado {
     dataFim: string
     status: 'AGENDADO' | 'ATIVO' | 'FINALIZADO' | 'CANCELADO'
     observacoes?: string
+    storeCode: string
     setor?: {
         id: number
         nome: string

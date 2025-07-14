@@ -2,12 +2,16 @@
 
 import dynamic from 'next/dynamic'
 import { ComponentType } from 'react'
+import { Setor, VendedorAgendado } from '@/hooks/useSetores'
 
 // Definir tipos das props para o mapa
 interface MapaSetoresProps {
     altura?: string
+    largura?: string
     dataFiltro?: string
-    onVendedorClick?: (vendedor: any) => void
+    setorSelecionado?: Setor | null
+    onSetorSelecionado?: (setor: Setor) => void
+    onVendedorClick?: (vendedor: VendedorAgendado) => void
 }
 
 // Importação dinâmica do componente do mapa para evitar problemas de SSR

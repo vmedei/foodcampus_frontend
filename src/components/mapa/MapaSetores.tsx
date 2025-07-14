@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { MapContainer, TileLayer, Marker, Polygon } from 'react-leaflet'
 import L from 'leaflet'
-import { useSetores } from '@/hooks/useSetores'
+import { useSetores, Setor, VendedorAgendado } from '@/hooks/useSetores'
 import { Phone, Clock, MapPin, Users, Calendar, AlertCircle, X, Info } from 'lucide-react'
 
 // Configuração do ícone padrão do Leaflet
@@ -16,19 +16,25 @@ L.Icon.Default.mergeOptions({
 
 interface MapaSetoresProps {
     altura?: string
+    largura?: string
     dataFiltro?: string
-    onVendedorClick?: (vendedor: any) => void
+    setorSelecionado?: Setor | null
+    onSetorSelecionado?: (setor: Setor) => void
+    onVendedorClick?: (vendedor: VendedorAgendado) => void
 }
 
 export default function MapaSetores({
     altura = '400px',
+    largura = '100%',
     dataFiltro,
+    setorSelecionado,
+    onSetorSelecionado,
     onVendedorClick
 }: MapaSetoresProps) {
     const { setores, loading, error, carregarVendedoresPorSetor } = useSetores()
-    const [setoresComVendedores, setSetoresComVendedores] = useState<any[]>([])
+    const [setoresComVendedores, setSetoresComVendedores] = useState<Setor[]>([])
     const [carregandoVendedores, setCarregandoVendedores] = useState(false)
-    const [setorSelecionado, setSetorSelecionado] = useState<any>(null)
+    const [setorSidebarAberto, setSetorSidebarAberto] = useState<Setor | null>(null)
     const [sidebarAberta, setSidebarAberta] = useState(false)
 
     useEffect(() => {
@@ -55,15 +61,31 @@ export default function MapaSetores({
         carregarDados()
     }, [setores, dataFiltro])
 
-    const handleSetorClick = (setor: any) => {
-        setSetorSelecionado(setor)
+    const handleSetorClick = (setor: Setor) => {
+        setSetorSidebarAberto(setor)
         setSidebarAberta(true)
+        
+        // Notificar componente pai sobre seleção
+        if (onSetorSelecionado) {
+            onSetorSelecionado(setor)
+        }
     }
 
     const fecharSidebar = () => {
         setSidebarAberta(false)
-        setSetorSelecionado(null)
+        setSetorSidebarAberto(null)
     }
+
+    // Sincronizar setor selecionado externamente com sidebar
+    useEffect(() => {
+        if (setorSelecionado && setorSelecionado.id !== setorSidebarAberto?.id) {
+            setSetorSidebarAberto(setorSelecionado)
+            setSidebarAberta(true)
+        } else if (!setorSelecionado && setorSidebarAberto) {
+            setSetorSidebarAberto(null)
+            setSidebarAberta(false)
+        }
+    }, [setorSelecionado])
 
     // Fechar sidebar quando clicar fora dela (apenas em mobile)
     useEffect(() => {
@@ -123,9 +145,9 @@ export default function MapaSetores({
     ]
 
     return (
-        <div className="relative flex w-full" style={{ height: altura }}>
+        <div className="relative flex" style={{ height: altura, width: largura }}>
             {/* Mapa */}
-            <div className={`transition-all  duration-300 ${sidebarAberta ? 'lg:w-2/3' : 'w-full'}`}>
+            <div className={`transition-all duration-300 ${sidebarAberta ? 'lg:w-2/3' : 'w-full'}`} style={{ width: largura }}>
                 <MapContainer
                     center={posicaoUFRN}
                     zoom={15}
@@ -181,15 +203,15 @@ export default function MapaSetores({
                 ${sidebarAberta ? 'fixed lg:relative right-0 top-0 w-80 lg:w-1/3' : 'fixed lg:relative'} 
                 overflow-hidden z-50 lg:z-auto
             `} style={{ height: sidebarAberta ? altura : 'auto' }}>
-                {sidebarAberta && setorSelecionado && (
+                {sidebarAberta && setorSidebarAberto && (
                     <div className="h-full bg-base-100 border-l border-base-300 flex flex-col shadow-lg lg:shadow-none">
                         {/* Header da Sidebar */}
                         <div className="flex items-center justify-between p-4 bg-primary text-primary-content">
                             <div className="flex items-center gap-3">
                                 <MapPin className="h-5 w-5" />
                                 <div>
-                                    <p className="font-bold text-lg">{setorSelecionado.nome}</p>
-                                    <h3 className="text-sm opacity-90">{setorSelecionado.sigla}</h3>
+                                    <p className="font-bold text-lg">{setorSidebarAberto.nome}</p>
+                                    <h3 className="text-sm opacity-90">{setorSidebarAberto.sigla}</h3>
                                 </div>
                             </div>
                             <button
@@ -206,19 +228,19 @@ export default function MapaSetores({
                             <div className="mb-6">
                                 <h4 className="font-semibold mb-3 text-base-content">Informações do Setor</h4>
 
-                                {setorSelecionado.endereco && (
+                                {setorSidebarAberto.endereco && (
                                     <div className="mb-3 p-3 bg-base-200 rounded-lg">
                                         <p className="text-sm">
                                             <strong className="text-base-content">Endereço:</strong>
                                             <br />
-                                            <span className="text-base-content/70">{setorSelecionado.endereco}</span>
+                                            <span className="text-base-content/70">{setorSidebarAberto.endereco}</span>
                                         </p>
                                     </div>
                                 )}
 
-                                {setorSelecionado.descricao && (
+                                {setorSidebarAberto.descricao && (
                                     <div className="mb-3 p-3 bg-base-200 rounded-lg">
-                                        <p className="text-sm text-base-content/70">{setorSelecionado.descricao}</p>
+                                        <p className="text-sm text-base-content/70">{setorSidebarAberto.descricao}</p>
                                     </div>
                                 )}
 
@@ -228,7 +250,7 @@ export default function MapaSetores({
                                         <strong className="text-base-content">Coordenadas:</strong>
                                         <br />
                                         <span className="text-base-content/70 font-mono text-xs">
-                                            {setorSelecionado.latitude.toFixed(4)}, {setorSelecionado.longitude.toFixed(4)}
+                                            {setorSidebarAberto.latitude.toFixed(4)}, {setorSidebarAberto.longitude.toFixed(4)}
                                         </span>
                                     </p>
                                 </div>
@@ -241,9 +263,9 @@ export default function MapaSetores({
                                     <h4 className="font-semibold">
                                         Vendedores {dataFiltro ? 'Hoje' : 'Disponíveis'}
                                     </h4>
-                                    {setorSelecionado.vendedores?.length > 0 && (
+                                    {(setorSidebarAberto.vendedores?.length || 0) > 0 && (
                                         <span className="badge badge-primary badge-sm">
-                                            {setorSelecionado.vendedores.length}
+                                            {setorSidebarAberto.vendedores?.length}
                                         </span>
                                     )}
                                 </div>
@@ -253,9 +275,9 @@ export default function MapaSetores({
                                         <span className="loading loading-spinner loading-sm text-primary"></span>
                                         <span className="ml-2 text-sm">Carregando vendedores...</span>
                                     </div>
-                                ) : setorSelecionado.vendedores?.length > 0 ? (
+                                ) : (setorSidebarAberto.vendedores?.length || 0) > 0 ? (
                                     <div className="space-y-3">
-                                        {setorSelecionado.vendedores.map((vendedor: any) => (
+                                        {setorSidebarAberto.vendedores?.map((vendedor: VendedorAgendado) => (
                                             <div
                                                 key={vendedor.agendamentoId}
                                                 className="card bg-base-200 shadow-sm cursor-pointer hover:shadow-md transition-all duration-200 hover:bg-base-300"
@@ -271,10 +293,11 @@ export default function MapaSetores({
                                                                 {vendedor.descricao}
                                                             </p>
                                                         </div>
-                                                        <span className={`badge badge-sm shrink-0 ${vendedor.status === 'ATIVO' ? 'badge-success' :
-                                                                vendedor.status === 'AGENDADO' ? 'badge-warning' :
-                                                                    'badge-neutral'
-                                                            }`}>
+                                                        <span className={`badge badge-sm shrink-0 ${
+                                                            vendedor.status === 'ATIVO' ? 'badge-success' :
+                                                            vendedor.status === 'AGENDADO' ? 'badge-warning' :
+                                                            'badge-neutral'
+                                                        }`}>
                                                             {vendedor.status}
                                                         </span>
                                                     </div>

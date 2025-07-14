@@ -2,13 +2,13 @@
 
 import { useAuth } from '@/hooks/useAuth'
 import { useRef } from 'react'
-import { ShoppingCart, LogOut } from 'lucide-react'
 import AgendamentoSetor from '@/components/vendedor/AgendamentoSetor'
 import CadastroProduto from '@/components/vendedor/CadastroProduto'
 import ListaProdutos, { ListaProdutosRef } from '@/components/vendedor/ListaProdutos'
+import MapaSetores from '../mapa/MapaSetores'
 
 export default function HomeVendedor() {
-    const { user, logout } = useAuth()
+    const { user } = useAuth()
 
     const listaProdutosRef = useRef<ListaProdutosRef>(null)
 
@@ -21,16 +21,9 @@ export default function HomeVendedor() {
             <div className="container mx-auto p-10">
 
                 {/* Header */}
-                <div className="flex justify-between items-center mb-8">
-                    <h1 className="text-3xl font-bold text-primary">Bem-vindo(a), {user?.name || user?.email}</h1>
-                    <button
-                        onClick={logout}
-                        className="btn btn-outline btn-error"
-                    >
-                        <LogOut className="h-4 w-4" />
-                        Sair
-                    </button>
-                </div>
+                <h1 className="text-3xl font-bold text-primary mb-6">
+                    Bem-vindo(a), {user?.name || user?.email}
+                </h1>
 
                 {/* Main Content */}
                 <div className="space-y-6">
@@ -42,10 +35,10 @@ export default function HomeVendedor() {
                         <div className="w-full">
                             <ListaProdutos ref={listaProdutosRef} />
                         </div>
-                        {/* Seção de Agendamento */}
-                        <div className="w-full">
-                            <AgendamentoSetor />
-                        </div>
+                    </div>
+                    {/* Seção de Agendamento */}
+                    <div className="w-full">
+                        <AgendamentoSetor />
                     </div>
 
                 </div>

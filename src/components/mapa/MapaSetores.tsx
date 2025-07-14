@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { MapContainer, TileLayer, Marker, Polygon } from 'react-leaflet'
 import L from 'leaflet'
 import { useSetores } from '@/hooks/useSetores'
-import { Phone, Clock, MapPin, Users, Calendar, AlertCircle, X } from 'lucide-react'
+import { Phone, Clock, MapPin, Users, Calendar, AlertCircle, X, Info } from 'lucide-react'
 
 // Configuração do ícone padrão do Leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl
@@ -105,21 +105,21 @@ export default function MapaSetores({
 
     // Coordenadas do perímetro do campus da UFRN (aproximadas)
     const coordenadasCampusUFRN: [number, number][] = [
-        [-5.838209863704848, -35.21062187058088], 
-        [-5.83490680204696, -35.21195044262278], 
-        [-5.83377593949745, -35.212166965128674], 
-        [-5.829485822186279, -35.21119260836936], 
-        [-5.832609173488709, -35.20300078082513], 
+        [-5.838209863704848, -35.21062187058088],
+        [-5.83490680204696, -35.21195044262278],
+        [-5.83377593949745, -35.212166965128674],
+        [-5.829485822186279, -35.21119260836936],
+        [-5.832609173488709, -35.20300078082513],
         [-5.8368812858359025, -35.19751546135553],
-        [-5.839896900165199, -35.19536824899022], 
-        [-5.840040500127037, -35.19522389448505], 
-        [-5.842517630027559, -35.19516972134657], 
+        [-5.839896900165199, -35.19536824899022],
+        [-5.840040500127037, -35.19522389448505],
+        [-5.842517630027559, -35.19516972134657],
         [-5.843612600965918, -35.195999732816105],
         [-5.843935708857704, -35.19704628656391],
         [-5.843343356175954, -35.20254969118126],
         [-5.837850619250457, -35.2055810334171],
         [-5.8384070794506275, -35.21021824355191],
-        [-5.838209863704848, -35.21062187058088]  
+        [-5.838209863704848, -35.21062187058088]
     ]
 
     return (
@@ -138,6 +138,12 @@ export default function MapaSetores({
 
                     {setoresComVendedores.map((setor) => (
                         <Marker
+                            icon={L.icon({
+                                iconUrl: setorSelecionado?.id === setor.id ? '/logo_orange_icon.svg' : '/logo_icon.svg',
+                                iconSize: [35, 35],
+                                iconAnchor: [12, 25],
+                                popupAnchor: [0, -25]
+                            })}
                             key={setor.id}
                             position={[setor.latitude, setor.longitude]}
                             eventHandlers={{
@@ -162,7 +168,7 @@ export default function MapaSetores({
 
             {/* Overlay para mobile */}
             {sidebarAberta && (
-                <div 
+                <div
                     className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
                     onClick={fecharSidebar}
                 />
@@ -186,7 +192,7 @@ export default function MapaSetores({
                                     <h3 className="text-sm opacity-90">{setorSelecionado.sigla}</h3>
                                 </div>
                             </div>
-                            <button 
+                            <button
                                 onClick={fecharSidebar}
                                 className="btn btn-ghost btn-sm btn-circle text-primary-content hover:bg-primary-focus"
                             >
@@ -199,7 +205,7 @@ export default function MapaSetores({
                             {/* Informações do Setor */}
                             <div className="mb-6">
                                 <h4 className="font-semibold mb-3 text-base-content">Informações do Setor</h4>
-                                
+
                                 {setorSelecionado.endereco && (
                                     <div className="mb-3 p-3 bg-base-200 rounded-lg">
                                         <p className="text-sm">
@@ -250,8 +256,8 @@ export default function MapaSetores({
                                 ) : setorSelecionado.vendedores?.length > 0 ? (
                                     <div className="space-y-3">
                                         {setorSelecionado.vendedores.map((vendedor: any) => (
-                                            <div 
-                                                key={vendedor.agendamentoId} 
+                                            <div
+                                                key={vendedor.agendamentoId}
                                                 className="card bg-base-200 shadow-sm cursor-pointer hover:shadow-md transition-all duration-200 hover:bg-base-300"
                                                 onClick={() => onVendedorClick?.(vendedor)}
                                             >
@@ -265,11 +271,10 @@ export default function MapaSetores({
                                                                 {vendedor.descricao}
                                                             </p>
                                                         </div>
-                                                        <span className={`badge badge-sm shrink-0 ${
-                                                            vendedor.status === 'ATIVO' ? 'badge-success' :
-                                                            vendedor.status === 'AGENDADO' ? 'badge-warning' :
-                                                            'badge-neutral'
-                                                        }`}>
+                                                        <span className={`badge badge-sm shrink-0 ${vendedor.status === 'ATIVO' ? 'badge-success' :
+                                                                vendedor.status === 'AGENDADO' ? 'badge-warning' :
+                                                                    'badge-neutral'
+                                                            }`}>
                                                             {vendedor.status}
                                                         </span>
                                                     </div>

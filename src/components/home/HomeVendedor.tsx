@@ -1,11 +1,19 @@
 'use client'
 
 import { useAuth } from '@/hooks/useAuth'
+import { useRef } from 'react'
 import { ShoppingCart, LogOut } from 'lucide-react'
 import AgendamentoSetor from '@/components/vendedor/AgendamentoSetor'
+import CadastroProduto from '@/components/vendedor/CadastroProduto'
+import ListaProdutos, { ListaProdutosRef } from '@/components/vendedor/ListaProdutos'
 
 export default function HomeVendedor() {
     const { user, logout } = useAuth()
+    const listaProdutosRef = useRef<ListaProdutosRef>(null)
+
+    const handleProdutoCriado = () => {
+        listaProdutosRef.current?.recarregarProdutos()
+    }
 
     return (
         <div className="bg-base-200">
@@ -27,37 +35,19 @@ export default function HomeVendedor() {
                 </div>
 
                 {/* Main Content */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    
-                    {/* Informações do Vendedor */}
-                    <div className="lg:col-span-1">
-                        <div className="card bg-base-100 shadow-lg">
-                            <div className="card-body text-center">
-                                <div className="avatar placeholder mb-4">
-                                    <div className="bg-secondary text-secondary-content rounded-full w-20">
-                                        <ShoppingCart className="h-10 w-10" />
-                                    </div>
-                                </div>
-                                
-                                <h2 className="text-xl font-bold text-secondary mb-2">
-                                    Área do Vendedor
-                                </h2>
-                                
-                                <p className="text-base-content/70 mb-4">
-                                    Você está logado como <span className="font-semibold text-secondary">{user?.type}</span>
-                                </p>
-                                
-                                <div className="bg-secondary/10 p-4 rounded-lg">
-                                    <p className="text-secondary font-semibold text-sm">
-                                        Gerencie seus agendamentos nos setores da UFRN
-                                    </p>
-                                </div>
-                            </div>
+                <div className="space-y-6">
+                    {/* Seção de Produtos */}
+                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                        <div className="w-full">
+                            <CadastroProduto onProdutoCriado={handleProdutoCriado} />
+                        </div>
+                        <div className="w-full">
+                            <ListaProdutos ref={listaProdutosRef} />
                         </div>
                     </div>
 
-                    {/* Agendamento */}
-                    <div className="lg:col-span-2">
+                    {/* Seção de Agendamento */}
+                    <div className="w-full">
                         <AgendamentoSetor />
                     </div>
                 </div>

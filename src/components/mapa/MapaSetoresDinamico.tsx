@@ -12,6 +12,7 @@ interface MapaSetoresProps {
     setorSelecionado?: Setor | null
     onSetorSelecionado?: (setor: Setor) => void
     onVendedorClick?: (vendedor: VendedorAgendado) => void
+    mostrarSeletorSetores?: boolean
 }
 
 // Importação dinâmica do componente do mapa para evitar problemas de SSR

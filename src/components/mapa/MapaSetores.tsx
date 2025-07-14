@@ -21,6 +21,7 @@ interface MapaSetoresProps {
     setorSelecionado?: Setor | null
     onSetorSelecionado?: (setor: Setor) => void
     onVendedorClick?: (vendedor: VendedorAgendado) => void
+    mostrarSeletorSetores?: boolean
 }
 
 export default function MapaSetores({
@@ -29,13 +30,36 @@ export default function MapaSetores({
     dataFiltro,
     setorSelecionado,
     onSetorSelecionado,
-    onVendedorClick
+    onVendedorClick,
+    mostrarSeletorSetores = false
 }: MapaSetoresProps) {
     const { setores, loading, error, carregarVendedoresPorSetor } = useSetores()
     const [setoresComVendedores, setSetoresComVendedores] = useState<Setor[]>([])
     const [carregandoVendedores, setCarregandoVendedores] = useState(false)
     const [setorSidebarAberto, setSetorSidebarAberto] = useState<Setor | null>(null)
     const [sidebarAberta, setSidebarAberta] = useState(false)
+
+    // Posição central da UFRN
+    const posicaoUFRN: [number, number] = [-5.8370, -35.2041]
+
+    // Coordenadas do perímetro do campus da UFRN (aproximadas)
+    const coordenadasCampusUFRN: [number, number][] = [
+        [-5.838209863704848, -35.21062187058088],
+        [-5.83490680204696, -35.21195044262278],
+        [-5.83377593949745, -35.212166965128674],
+        [-5.829485822186279, -35.21119260836936],
+        [-5.832609173488709, -35.20300078082513],
+        [-5.8368812858359025, -35.19751546135553],
+        [-5.839896900165199, -35.19536824899022],
+        [-5.840040500127037, -35.19522389448505],
+        [-5.842517630027559, -35.19516972134657],
+        [-5.843612600965918, -35.195999732816105],
+        [-5.843935708857704, -35.19704628656391],
+        [-5.843343356175954, -35.20254969118126],
+        [-5.837850619250457, -35.2055810334171],
+        [-5.8384070794506275, -35.21021824355191],
+        [-5.838209863704848, -35.21062187058088]
+    ]
 
     useEffect(() => {
         const carregarDados = async () => {
@@ -64,7 +88,7 @@ export default function MapaSetores({
     const handleSetorClick = (setor: Setor) => {
         setSetorSidebarAberto(setor)
         setSidebarAberta(true)
-        
+
         // Notificar componente pai sobre seleção
         if (onSetorSelecionado) {
             onSetorSelecionado(setor)
@@ -74,6 +98,7 @@ export default function MapaSetores({
     const fecharSidebar = () => {
         setSidebarAberta(false)
         setSetorSidebarAberto(null)
+        onSetorSelecionado?.(null as unknown as Setor)
     }
 
     // Sincronizar setor selecionado externamente com sidebar
@@ -122,27 +147,6 @@ export default function MapaSetores({
         )
     }
 
-    // Posição central da UFRN
-    const posicaoUFRN: [number, number] = [-5.8370, -35.2041]
-
-    // Coordenadas do perímetro do campus da UFRN (aproximadas)
-    const coordenadasCampusUFRN: [number, number][] = [
-        [-5.838209863704848, -35.21062187058088],
-        [-5.83490680204696, -35.21195044262278],
-        [-5.83377593949745, -35.212166965128674],
-        [-5.829485822186279, -35.21119260836936],
-        [-5.832609173488709, -35.20300078082513],
-        [-5.8368812858359025, -35.19751546135553],
-        [-5.839896900165199, -35.19536824899022],
-        [-5.840040500127037, -35.19522389448505],
-        [-5.842517630027559, -35.19516972134657],
-        [-5.843612600965918, -35.195999732816105],
-        [-5.843935708857704, -35.19704628656391],
-        [-5.843343356175954, -35.20254969118126],
-        [-5.837850619250457, -35.2055810334171],
-        [-5.8384070794506275, -35.21021824355191],
-        [-5.838209863704848, -35.21062187058088]
-    ]
 
     return (
         <div className="relative flex" style={{ height: altura, width: largura }}>
@@ -186,6 +190,43 @@ export default function MapaSetores({
                         }}
                     />
                 </MapContainer>
+
+                {/* Seletor de setores no canto inferior esquerdo */}
+                {mostrarSeletorSetores &&
+                    <div
+                        className="absolute left-4 bottom-4 z-[1000] bg-base-100 rounded-lg shadow-lg p-2 flex items-center gap-2"
+                        style={{ minWidth: 220 }}
+                    >
+                        {!carregandoVendedores ? (
+                            <>
+                                <MapPin className="h-5 w-5 text-primary" />
+                                <select
+                                    className="select select-bordered select-sm w-full"
+                                    value={setorSelecionado?.id || ''}
+                                    onChange={e => {
+                                        const setorId = Number(e.target.value)
+                                        const setor = setoresComVendedores.find(s => s.id === setorId)
+                                        if (setor && onSetorSelecionado) {
+                                            onSetorSelecionado(setor)
+                                        }
+                                    }}
+                                >
+                                    <option value="">Selecionar setor...</option>
+                                    {setoresComVendedores.map(setor => (
+                                        <option key={setor.id} value={setor.id}>
+                                            {setor.sigla} - {setor.descricao}
+                                        </option>
+                                    ))}
+                                </select>
+                            </>
+                        ) : (
+                            <>
+                                <span className="loading loading-spinner loading-sm text-primary"></span>
+                                <span className="text-sm font-medium">Carregando vendedores...</span>
+                            </>
+                        )}
+                    </div>
+                }
             </div>
 
             {/* Overlay para mobile */}
@@ -199,8 +240,8 @@ export default function MapaSetores({
             {/* Sidebar */}
             <div className={`
                 transition-all duration-300 
-                ${sidebarAberta ? 'lg:w-1/3 lg:relative' : 'w-0 lg:w-0'} 
-                ${sidebarAberta ? 'fixed lg:relative right-0 top-0 w-80 lg:w-1/3' : 'fixed lg:relative'} 
+                ${sidebarAberta ? 'lg:w-3/4 lg:relative' : 'w-0 lg:w-0'} 
+                ${sidebarAberta ? 'fixed lg:relative right-0 top-0 w-80 lg:w-3/4' : 'fixed lg:relative'} 
                 overflow-hidden z-50 lg:z-auto
             `} style={{ height: sidebarAberta ? altura : 'auto' }}>
                 {sidebarAberta && setorSidebarAberto && (
@@ -216,7 +257,7 @@ export default function MapaSetores({
                             </div>
                             <button
                                 onClick={fecharSidebar}
-                                className="btn btn-ghost btn-sm btn-circle text-primary-content hover:bg-primary-focus"
+                                className="btn btn-ghost btn-sm btn-primary btn-circle text-primary-content"
                             >
                                 <X className="h-4 w-4" />
                             </button>
@@ -293,11 +334,10 @@ export default function MapaSetores({
                                                                 {vendedor.descricao}
                                                             </p>
                                                         </div>
-                                                        <span className={`badge badge-sm shrink-0 ${
-                                                            vendedor.status === 'ATIVO' ? 'badge-success' :
+                                                        <span className={`badge badge-sm shrink-0 ${vendedor.status === 'ATIVO' ? 'badge-success' :
                                                             vendedor.status === 'AGENDADO' ? 'badge-warning' :
-                                                            'badge-neutral'
-                                                        }`}>
+                                                                'badge-neutral'
+                                                            }`}>
                                                             {vendedor.status}
                                                         </span>
                                                     </div>

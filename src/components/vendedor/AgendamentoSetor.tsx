@@ -4,13 +4,17 @@ import { useState, useEffect } from 'react'
 import { useSetores, Setor, VendedorAgendado } from '@/hooks/useSetores'
 import { Calendar, Clock, MapPin, Save, AlertCircle, CheckCircle, List, Map, Eye } from 'lucide-react'
 import { MapaSetores } from '../mapa'
+import StatusDropdown from './StatusDropdown'
 
 export default function AgendamentoSetor() {
-    const { setores, agendarVendedor, carregarMeusAgendamentos } = useSetores()
+    const { setores, agendarVendedor, carregarMeusAgendamentos, atualizarStatusAgendamento } = useSetores()
     const [visualizacao, setVisualizacao] = useState<'mapa' | 'agendamentos'>('mapa')
     const [agendamentos, setAgendamentos] = useState<VendedorAgendado[]>([])
     const [loadingAgendamentos, setLoadingAgendamentos] = useState(false)
     const [setorSelecionadoMapa, setSetorSelecionadoMapa] = useState<Setor | null>(null)
+    const [loadingStatus, setLoadingStatus] = useState<number | null>(null)
+    const [mensagemStatus, setMensagemStatus] = useState<string | null>(null)
+    const [mostrarApenasAtivos, setMostrarApenasAtivos] = useState(false)
     const [formData, setFormData] = useState({
         setorId: '',
         data: '',
@@ -62,6 +66,18 @@ export default function AgendamentoSetor() {
             setLoadingAgendamentos(false)
         }
     }
+
+    // Filtrar agendamentos baseado no estado
+    const agendamentosFiltrados = mostrarApenasAtivos 
+        ? agendamentos.filter(agendamento => 
+            agendamento.status === 'AGENDADO' || agendamento.status === 'ATIVO'
+          )
+        : agendamentos
+
+    // Filtrar agendamentos ativos para o mapa (apenas AGENDADO e ATIVO)
+    const agendamentosAtivos = agendamentos.filter(agendamento => 
+        agendamento.status === 'AGENDADO' || agendamento.status === 'ATIVO'
+    )
 
     const handleSetorSelecionadoMapa = (setor: Setor) => {
         setSetorSelecionadoMapa(setor)
@@ -141,25 +157,56 @@ export default function AgendamentoSetor() {
         })
     }
 
-    const getStatusBadge = (status: string) => {
-        switch (status) {
-            case 'AGENDADO':
-                return <span className="badge badge-primary">Agendado</span>
-            case 'ATIVO':
-                return <span className="badge badge-success">Ativo</span>
-            case 'FINALIZADO':
-                return <span className="badge badge-neutral">Finalizado</span>
-            case 'CANCELADO':
-                return <span className="badge badge-error">Cancelado</span>
-            default:
-                return <span className="badge badge-ghost">{status}</span>
+    const getStatusBadge = (status: string, agendamentoId: number) => {
+        const isLoading = loadingStatus === agendamentoId
+
+        if (isLoading) {
+            return <span className="badge badge-ghost opacity-50">Atualizando...</span>
         }
+
+        return (
+            <StatusDropdown
+                currentStatus={status}
+                agendamentoId={agendamentoId}
+                onStatusChange={handleAtualizarStatus}
+                loading={isLoading}
+            />
+        )
     }
 
     const getNomeSetor = (setorId: number) => {
         const setor = setores.find(s => s.id === setorId)
         return setor ? `${setor.sigla} - ${setor.nome}` : 'Setor não encontrado'
     }
+
+    const handleAtualizarStatus = async (agendamentoId: number, novoStatus: string) => {
+        setLoadingStatus(agendamentoId)
+        try {
+            await atualizarStatusAgendamento(agendamentoId, novoStatus)
+            
+            // Atualizar o agendamento na lista local
+            setAgendamentos(prev => prev.map(agendamento => 
+                agendamento.agendamentoId === agendamentoId 
+                    ? { ...agendamento, status: novoStatus as any }
+                    : agendamento
+            ))
+            
+            // Mostrar mensagem de sucesso
+            const statusText = novoStatus === 'ATIVO' ? 'ativado' : 'finalizado'
+            setMensagemStatus(`Agendamento ${statusText} com sucesso!`)
+            
+            // Limpar mensagem após 3 segundos
+            setTimeout(() => setMensagemStatus(null), 3000)
+        } catch (error: any) {
+            console.error('Erro ao atualizar status:', error)
+            setMensagemStatus('Erro ao atualizar status do agendamento')
+            setTimeout(() => setMensagemStatus(null), 3000)
+        } finally {
+            setLoadingStatus(null)
+        }
+    }
+
+
 
     return (
         <div className="card card-side bg-base-100 shadow-lg items-center">
@@ -182,6 +229,14 @@ export default function AgendamentoSetor() {
                     <div className="alert alert-error mb-4">
                         <AlertCircle className="h-4 w-4" />
                         <span>{erro}</span>
+                    </div>
+                )}
+
+                {/* Mensagem de status */}
+                {mensagemStatus && (
+                    <div className="alert alert-info mb-4">
+                        <CheckCircle className="h-4 w-4" />
+                        <span>{mensagemStatus}</span>
                     </div>
                 )}
 
@@ -307,43 +362,65 @@ export default function AgendamentoSetor() {
 
                 {/* Conteúdo baseado na visualização selecionada */}
                 {visualizacao === 'mapa' ? (
-                    <MapaSetores
-                        largura='100%'
-                        altura='700px'
+                <MapaSetores
+                    largura='100%'
+                    altura='700px'
                         setorSelecionado={setorSelecionadoMapa}
                         onSetorSelecionado={handleSetorSelecionadoMapa}
                     />
                 ) : (
                     <div className="p-4">
-                        <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                            <List className="h-5 w-5" />
-                            Meus Agendamentos
-                        </h3>
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="text-lg font-semibold flex items-center gap-2">
+                                <List className="h-5 w-5" />
+                                Meus Agendamentos
+                            </h3>
+                            
+                            <div className="flex items-center gap-4">
+                                <span className="text-xs text-base-content/60">
+                                    {agendamentosFiltrados.length} de {agendamentos.length} agendamentos
+                                </span>
+                                <label className="label cursor-pointer gap-2">
+                                    <span className="label-text text-sm">Apenas ativos</span>
+                                    <input
+                                        type="checkbox"
+                                        className="toggle toggle-primary toggle-sm"
+                                        checked={mostrarApenasAtivos}
+                                        onChange={(e) => setMostrarApenasAtivos(e.target.checked)}
+                                    />
+                                </label>
+                            </div>
+                        </div>
                         
                         {loadingAgendamentos ? (
                             <div className="flex justify-center items-center h-32">
                                 <span className="loading loading-spinner loading-lg"></span>
                             </div>
-                        ) : agendamentos.length === 0 ? (
+                        ) : agendamentosFiltrados.length === 0 ? (
                             <div className="text-center py-8 text-base-content/70">
                                 <Calendar className="h-12 w-12 mx-auto mb-4 opacity-50" />
                                 <p>Nenhum agendamento encontrado</p>
-                                <p className="text-sm">Crie seu primeiro agendamento usando o formulário ao lado</p>
+                                <p className="text-sm">
+                                    {mostrarApenasAtivos 
+                                        ? 'Não há agendamentos ativos ou agendados'
+                                        : 'Crie seu primeiro agendamento usando o formulário ao lado'
+                                    }
+                                </p>
                             </div>
                         ) : (
                             <div className="space-y-4 max-h-96 overflow-y-auto">
-                                {agendamentos.map((agendamento) => (
+                                {agendamentosFiltrados.map((agendamento) => (
                                     <div key={agendamento.agendamentoId} className="card bg-base-200 shadow-sm">
                                         <div className="card-body p-4">
                                             <div className="flex justify-between items-start mb-2">
                                                 <h4 className="font-medium">{agendamento.nomeFantasia}</h4>
-                                                {getStatusBadge(agendamento.status)}
+                                                {getStatusBadge(agendamento.status, agendamento.agendamentoId)}
                                             </div>
                                             
                                             <div className="space-y-2 text-sm">
                                                 <div className="flex items-center gap-2">
                                                     <MapPin className="h-4 w-4 text-primary" />
-                                                    <span>Setor: {getNomeSetor(agendamento.vendedorId)}</span>
+                                                    <span>Setor: {getNomeSetor(agendamento.setor?.id || 0)}</span>
                                                 </div>
                                                 
                                                 <div className="flex items-center gap-2">

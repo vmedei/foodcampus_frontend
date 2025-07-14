@@ -39,15 +39,13 @@ export default function HomeCliente() {
 
                 {/* Mapa Principal */}
                 <div className="card bg-base-100 shadow-lg">
-                    <div className="card-body p-0">
-                        <div className="p-4 border-b border-base-300">
+                    <div className="card-body">
                             <h2 className="card-title text-primary">
                                 <MapPin className="h-5 w-5" />
                                 Setores da UFRN
                             </h2>
-                        </div>
                         
-                        <div className="rounded-b-lg overflow-hidden">
+                        <div className="rounded-b-xl overflow-hidden">
                             <MapaSetores 
                                 altura="600px"
                                 dataFiltro={new Date().toISOString().split('T')[0]}

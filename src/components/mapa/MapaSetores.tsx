@@ -125,12 +125,11 @@ export default function MapaSetores({
     return (
         <div className="relative flex w-full" style={{ height: altura }}>
             {/* Mapa */}
-            <div className={`transition-all duration-300 ${sidebarAberta ? 'lg:w-2/3' : 'w-full'}`}>
+            <div className={`transition-all  duration-300 ${sidebarAberta ? 'lg:w-2/3' : 'w-full'}`}>
                 <MapContainer
                     center={posicaoUFRN}
                     zoom={15}
                     style={{ height: '100%', width: '100%' }}
-                    className="rounded-lg"
                 >
                     <TileLayer
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -173,7 +172,7 @@ export default function MapaSetores({
             <div className={`
                 transition-all duration-300 
                 ${sidebarAberta ? 'lg:w-1/3 lg:relative' : 'w-0 lg:w-0'} 
-                ${sidebarAberta ? 'fixed lg:relative right-0 top-0 w-80 lg:w-auto' : 'fixed lg:relative'} 
+                ${sidebarAberta ? 'fixed lg:relative right-0 top-0 w-80 lg:w-1/3' : 'fixed lg:relative'} 
                 overflow-hidden z-50 lg:z-auto
             `} style={{ height: sidebarAberta ? altura : 'auto' }}>
                 {sidebarAberta && setorSelecionado && (

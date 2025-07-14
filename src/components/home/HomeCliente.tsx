@@ -15,7 +15,7 @@ export default function HomeCliente() {
                 <div className="flex justify-between items-center mb-6">
                     <div>
                         <h1 className="text-2xl font-bold text-primary">Food Campus - Cliente</h1>
-                        <p className="text-base-content/70">Bem-vindo(a), {user?.email}</p>
+                        <p className="text-base-content/70">Bem-vindo(a), {user?.name || user?.email}</p>
                     </div>
                     <button
                         onClick={logout}

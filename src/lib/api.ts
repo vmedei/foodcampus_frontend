@@ -62,6 +62,7 @@ export interface ProductResponse {
 export interface UserResponse {
   email: string
   type: UserType
+  name: string
 }
 
 export interface AuthenticatedUserResponse {

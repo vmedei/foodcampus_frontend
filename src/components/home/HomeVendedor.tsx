@@ -9,6 +9,7 @@ import ListaProdutos, { ListaProdutosRef } from '@/components/vendedor/ListaProd
 
 export default function HomeVendedor() {
     const { user, logout } = useAuth()
+
     const listaProdutosRef = useRef<ListaProdutosRef>(null)
 
     const handleProdutoCriado = () => {
@@ -23,7 +24,7 @@ export default function HomeVendedor() {
                 <div className="flex justify-between items-center mb-8">
                     <div>
                         <h1 className="text-3xl font-bold text-primary">Home do Vendedor</h1>
-                        <p className="text-base-content/70">Bem-vindo(a), {user?.email}</p>
+                        <p className="text-base-content/70">Bem-vindo(a), {user?.name || user?.email}</p>
                     </div>
                     <button 
                         onClick={logout}

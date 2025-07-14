@@ -92,13 +92,8 @@ export default function AgendamentoSetor() {
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="form-control">
-                        <label className="label">
-                            <span className="label-text flex items-center gap-2">
-                                <MapPin className="h-4 w-4" />
-                                Setor da UFRN
-                            </span>
-                        </label>
+                    <fieldset className="fieldset">
+                        <legend className="fieldset-legend text-neutral/65">Setor da UFRN</legend>
                         <select 
                             className="select select-bordered w-full"
                             value={formData.setorId}
@@ -112,33 +107,23 @@ export default function AgendamentoSetor() {
                                 </option>
                             ))}
                         </select>
-                    </div>
+                    </fieldset>
 
-                    <div className="form-control">
-                        <label className="label">
-                            <span className="label-text flex items-center gap-2">
-                                <Calendar className="h-4 w-4" />
-                                Data
-                            </span>
-                        </label>
+                    <fieldset className="fieldset">
+                        <legend className="fieldset-legend text-neutral/65">Data</legend>
                         <input
                             type="date"
-                            className="input input-bordered w-full"
+                            className="input w-full"
                             value={formData.data}
                             onChange={(e) => setFormData({...formData, data: e.target.value})}
                             min={formatarDataMinima()}
                             required
                         />
-                    </div>
+                    </fieldset>
 
                     <div className="grid grid-cols-2 gap-4">
-                        <div className="form-control">
-                            <label className="label">
-                                <span className="label-text flex items-center gap-2">
-                                    <Clock className="h-4 w-4" />
-                                    Hora Início
-                                </span>
-                            </label>
+                        <fieldset className="fieldset">
+                            <legend className="fieldset-legend text-neutral/65">Hora Início</legend>
                             <input
                                 type="time"
                                 className="input input-bordered w-full"
@@ -146,14 +131,9 @@ export default function AgendamentoSetor() {
                                 onChange={(e) => setFormData({...formData, horaInicio: e.target.value})}
                                 required
                             />
-                        </div>
-                        <div className="form-control">
-                            <label className="label">
-                                <span className="label-text flex items-center gap-2">
-                                    <Clock className="h-4 w-4" />
-                                    Hora Fim
-                                </span>
-                            </label>
+                        </fieldset>
+                        <fieldset className="fieldset">
+                            <legend className="fieldset-legend text-neutral/65">Hora Fim</legend>
                             <input
                                 type="time"
                                 className="input input-bordered w-full"
@@ -161,20 +141,18 @@ export default function AgendamentoSetor() {
                                 onChange={(e) => setFormData({...formData, horaFim: e.target.value})}
                                 required
                             />
-                        </div>
+                        </fieldset>
                     </div>
 
-                    <div className="form-control">
-                        <label className="label">
-                            <span className="label-text">Observações</span>
-                        </label>
+                    <fieldset className="fieldset">
+                        <legend className="fieldset-legend text-neutral/65">Observações</legend>
                         <textarea
-                            className="textarea textarea-bordered h-20"
+                            className="textarea h-20 w-full"
                             placeholder="Informações sobre produtos, promoções, etc..."
                             value={formData.observacoes}
                             onChange={(e) => setFormData({...formData, observacoes: e.target.value})}
                         />
-                    </div>
+                    </fieldset>
 
                     <div className="alert alert-info">
                         <AlertCircle className="h-4 w-4" />

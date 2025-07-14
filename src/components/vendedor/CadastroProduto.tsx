@@ -161,14 +161,15 @@ export default function CadastroProduto({ onProdutoCriado }: CadastroProdutoProp
     return (
         <div className="card bg-base-100 shadow-lg">
             <div className="card-body">
-                <h2 className="card-title text-primary mb-4">
+
+                <h2 className="card-title text-primary">
                     <Package className="h-5 w-5" />
                     Cadastrar Produto
                 </h2>
 
                 {/* Mensagem de sucesso */}
                 {sucesso && (
-                    <div className="alert alert-success mb-4">
+                    <div className="alert alert-success">
                         <CheckCircle className="h-4 w-4" />
                         <span>Produto cadastrado com sucesso!</span>
                     </div>
@@ -176,89 +177,84 @@ export default function CadastroProduto({ onProdutoCriado }: CadastroProdutoProp
 
                 {/* Mensagem de erro */}
                 {erro && (
-                    <div className="alert alert-error mb-4">
+                    <div className="alert alert-error">
                         <AlertCircle className="h-4 w-4" />
                         <span>{erro}</span>
                     </div>
                 )}
 
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="form-control">
-                        <label className="label">
-                            <span className="label-text">Nome do Produto</span>
-                        </label>
-                        <input
-                            type="text"
-                            name="name"
-                            className="input input-bordered w-full"
-                            placeholder="Ex: Sanduíche de Frango"
-                            value={formData.name}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
 
-                    <div className="form-control">
-                        <label className="label">
-                            <span className="label-text">Descrição</span>
-                        </label>
-                        <textarea
-                            name="description"
-                            className="textarea textarea-bordered h-24"
-                            placeholder="Descreva os ingredientes e características do produto..."
-                            value={formData.description}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-
-                    <div className="form-control">
-                        <label className="label">
-                            <span className="label-text">Preço (R$)</span>
-                        </label>
-                        <input
-                            type="number"
-                            name="price"
-                            className="input input-bordered w-full"
-                            placeholder="0,00"
-                            min="0"
-                            step="0.01"
-                            value={formData.price}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-
-                    <div className="form-control">
-                        <label className="label">
-                            <span className="label-text">Imagem do Produto</span>
-                        </label>
-                        <div className="space-y-2">
+                <form onSubmit={handleSubmit} className='space-y-4'>
+                    <div>
+                        <fieldset className="fieldset">
+                            <legend className="fieldset-legend text-neutral/65">Nome do Produto</legend>
                             <input
-                                type="file"
-                                ref={fileInputRef}
-                                accept="image/*"
-                                onChange={handleImageUpload}
-                                className="file-input file-input-bordered w-full"
+                                type="text"
+                                name="name"
+                                className="input w-full"
+                                placeholder="Ex: Sanduíche de Frango"
+                                value={formData.name}
+                                onChange={handleChange}
+                                required
                             />
-                            
-                            {imagemPreview && (
-                                <div className="relative">
-                                    <img
-                                        src={imagemPreview}
-                                        alt="Preview do produto"
-                                        className="w-32 h-32 object-cover rounded-lg border-2 border-base-300"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={removerImagem}
-                                        className="absolute -top-2 -right-2 btn btn-circle btn-sm btn-error"
-                                    >
-                                        <X className="h-4 w-4" />
-                                    </button>
-                                </div>
-                            )}
-                        </div>
+                        </fieldset>
+
+                        <fieldset className="fieldset">
+                            <legend className="fieldset-legend text-neutral/65">Descrição</legend>
+                            <textarea
+                                name="description"
+                                className="textarea h-24 w-full"
+                                placeholder="Descreva os ingredientes e características do produto..."
+                                value={formData.description}
+                                onChange={handleChange}
+                                required
+                            />
+                        </fieldset>
+
+                        <fieldset className="fieldset">
+                            <legend className="fieldset-legend text-neutral/65">Preço (R$)</legend>
+                            <input
+                                type="number"
+                                name="price"
+                                className="input w-full"
+                                placeholder="0,00"
+                                min="0"
+                                step="0.01"
+                                value={formData.price}
+                                onChange={handleChange}
+                                required
+                            />
+                        </fieldset>
+
+                        <fieldset className="fieldset">
+                            <legend className="fieldset-legend text-neutral/65">Imagem do Produto</legend>
+                            <div className="space-y-2">
+                                <input
+                                    type="file"
+                                    ref={fileInputRef}
+                                    accept="image/*"
+                                    onChange={handleImageUpload}
+                                    className="file-input w-full"
+                                />
+                                
+                                {imagemPreview && (
+                                    <div className="relative">
+                                        <img
+                                            src={imagemPreview}
+                                            alt="Preview do produto"
+                                            className="w-32 h-32 object-cover rounded-lg border-2 border-base-300"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={removerImagem}
+                                            className="absolute -top-2 -right-2 btn btn-circle btn-sm btn-error"
+                                        >
+                                            <X className="h-4 w-4" />
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </fieldset>
                     </div>
 
                     <div className="alert alert-info">

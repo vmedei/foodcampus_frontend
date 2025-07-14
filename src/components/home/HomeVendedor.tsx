@@ -18,15 +18,12 @@ export default function HomeVendedor() {
 
     return (
         <div className="bg-base-200">
-            <div className="container mx-auto px-4 py-8">
-                
+            <div className="container mx-auto p-10">
+
                 {/* Header */}
                 <div className="flex justify-between items-center mb-8">
-                    <div>
-                        <h1 className="text-3xl font-bold text-primary">Home do Vendedor</h1>
-                        <p className="text-base-content/70">Bem-vindo(a), {user?.name || user?.email}</p>
-                    </div>
-                    <button 
+                    <h1 className="text-3xl font-bold text-primary">Bem-vindo(a), {user?.name || user?.email}</h1>
+                    <button
                         onClick={logout}
                         className="btn btn-outline btn-error"
                     >
@@ -45,12 +42,12 @@ export default function HomeVendedor() {
                         <div className="w-full">
                             <ListaProdutos ref={listaProdutosRef} />
                         </div>
+                        {/* Seção de Agendamento */}
+                        <div className="w-full">
+                            <AgendamentoSetor />
+                        </div>
                     </div>
 
-                    {/* Seção de Agendamento */}
-                    <div className="w-full">
-                        <AgendamentoSetor />
-                    </div>
                 </div>
             </div>
         </div>

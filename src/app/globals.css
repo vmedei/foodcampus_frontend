@@ -19,7 +19,7 @@
   --color-accent-content: oklch(38% 0.063 188.416);
   --color-neutral: oklch(26% 0.051 172.552);
   --color-neutral-content: oklch(92% 0.004 286.32);
-  --color-info: oklch(74% 0.16 232.661);
+  --color-info: oklch(97% 0.013 236.62);
   --color-info-content: oklch(29% 0.066 243.157);
   --color-success: oklch(76% 0.177 163.223);
   --color-success-content: oklch(37% 0.077 168.94);
@@ -36,6 +36,7 @@
   --depth: 1;
   --noise: 0;
 }
+
 
 /* Estilos específicos para o mapa Leaflet */
 .leaflet-container {

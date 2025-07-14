@@ -3,9 +3,17 @@
 import { useAuth } from '@/hooks/useAuth'
 import { MapPin, Info } from 'lucide-react'
 import { MapaSetores } from '@/components/mapa'
+import { useState } from 'react'
+import { Setor } from '@/hooks/useSetores'
 
 export default function HomeCliente() {
     const { user } = useAuth()
+
+    const [setorSelecionado, setSetorSelecionado] = useState<Setor | null>(null)
+
+    const handleSetorSelecionado = (setor: Setor) => {
+        setSetorSelecionado(setor)
+    }
 
     return (
         <div className="bg-base-200 min-h-screen">
@@ -34,6 +42,9 @@ export default function HomeCliente() {
                                     // Lógica para fazer reserva - implementar futuramente
                                     console.log('Vendedor selecionado:', vendedor)
                                 }}
+                                setorSelecionado={setorSelecionado}
+                                onSetorSelecionado={handleSetorSelecionado}
+                                mostrarSeletorSetores={true}
                             />
                         </div>
 

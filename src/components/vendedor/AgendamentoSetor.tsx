@@ -307,9 +307,9 @@ export default function AgendamentoSetor() {
 
                 {/* Conteúdo baseado na visualização selecionada */}
                 {visualizacao === 'mapa' ? (
-                    <MapaSetores
-                        largura='100%'
-                        altura='700px'
+                <MapaSetores
+                    largura='100%'
+                    altura='700px'
                         setorSelecionado={setorSelecionadoMapa}
                         onSetorSelecionado={handleSetorSelecionadoMapa}
                     />

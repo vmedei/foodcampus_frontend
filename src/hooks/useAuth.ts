@@ -7,8 +7,7 @@ import {
   authUtils, 
   useApiError, 
   LoginRequest, 
-  UserResponse, 
-  AuthenticatedUserResponse 
+  UserResponse
 } from '@/lib/api'
 
 interface AuthState {

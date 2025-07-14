@@ -319,6 +319,64 @@ export const useApiError = () => {
   return { handleApiError }
 }
 
+// ========================
+// INSTÂNCIA GENÉRICA DE API
+// ========================
+
+export const api = {
+  get: async <T = any>(endpoint: string, params?: Record<string, any>): Promise<T> => {
+    const token = authUtils.getToken()
+    const url = new URL(`${API_BASE_URL}${endpoint}`)
+    
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          url.searchParams.append(key, String(value))
+        }
+      })
+    }
+    
+    const response = await fetch(url.toString(), {
+      method: 'GET',
+      headers: getHeaders(token || undefined),
+    })
+    
+    return handleResponse<T>(response)
+  },
+
+  post: async <T = any>(endpoint: string, data?: any): Promise<T> => {
+    const token = authUtils.getToken()
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      method: 'POST',
+      headers: getHeaders(token || undefined),
+      body: data ? JSON.stringify(data) : undefined,
+    })
+    
+    return handleResponse<T>(response)
+  },
+
+  put: async <T = any>(endpoint: string, data?: any): Promise<T> => {
+    const token = authUtils.getToken()
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      method: 'PUT',
+      headers: getHeaders(token || undefined),
+      body: data ? JSON.stringify(data) : undefined,
+    })
+    
+    return handleResponse<T>(response)
+  },
+
+  delete: async <T = any>(endpoint: string): Promise<T> => {
+    const token = authUtils.getToken()
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      method: 'DELETE',
+      headers: getHeaders(token || undefined),
+    })
+    
+    return handleResponse<T>(response)
+  }
+}
+
 // Export default para facilitar importação
 export default {
   auth: authAPI,

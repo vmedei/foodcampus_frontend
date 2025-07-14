@@ -1,100 +1,86 @@
 'use client'
 
 import { useAuth } from '@/hooks/useAuth'
-import { User, LogOut, MapPin } from 'lucide-react'
-import { MapaInterativo } from '@/components/mapa'
+import { User, LogOut, MapPin, Info } from 'lucide-react'
+import { MapaSetores } from '@/components/mapa'
 
 export default function HomeCliente() {
     const { user, logout } = useAuth()
 
     return (
-        <div className="bg-base-200">
-            <div className="container mx-auto px-4 py-8">
+        <div className="bg-base-200 min-h-screen">
+            <div className="container mx-auto px-4 py-6">
                 
                 {/* Header */}
-                <div className="flex justify-between items-center mb-8">
+                <div className="flex justify-between items-center mb-6">
                     <div>
-                        <h1 className="text-3xl font-bold text-primary">Home - Cliente</h1>
+                        <h1 className="text-2xl font-bold text-primary">Food Campus - Cliente</h1>
                         <p className="text-base-content/70">Bem-vindo(a), {user?.email}</p>
                     </div>
                     <button 
                         onClick={logout}
-                        className="btn btn-outline btn-error"
+                        className="btn btn-outline btn-error btn-sm"
                     >
                         <LogOut className="h-4 w-4" />
                         Sair
                     </button>
                 </div>
 
-                {/* Grid Layout */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    
-                    {/* Informações do Usuário */}
-                    <div className="lg:col-span-1">
-                        <div className="card bg-base-100 shadow-lg">
-                            <div className="card-body text-center">
-                                
-                                <div className="bg-primary/10 p-4 rounded-lg mb-4">
-                                    <p className="text-primary font-semibold text-sm">
-                                        Explore os setores da UFRN no mapa!
-                                    </p>
-                                </div>
-                                
-                                <div className="stats stats-vertical shadow">
-                                    <div className="stat">
-                                        <div className="stat-title">Setores da UFRN</div>
-                                        <div className="stat-value text-primary">5</div>
-                                    </div>
-                                    <div className="stat">
-                                        <div className="stat-title">Vendedores totais</div>
-                                        <div className="stat-value text-secondary">9</div>
-                                    </div>
-                                </div>
-                            </div>
+                {/* Instruções */}
+                <div className="alert alert-info mb-6">
+                    <Info className="h-5 w-5" />
+                    <div>
+                        <h3 className="font-bold">Como usar:</h3>
+                        <div className="text-sm mt-1">
+                            Clique nos marcadores dos setores no mapa para ver os vendedores disponíveis em cada localização da UFRN.
                         </div>
                     </div>
+                </div>
 
-                    {/* Mapa Interativo */}
-                    <div className="lg:col-span-2">
-                        <div className="card bg-base-100 shadow-lg">
-                            <div className="card-body">
-                                <h2 className="card-title text-primary mb-4">
-                                    <MapPin className="h-5 w-5" />
-                                    Setores da UFRN
-                                </h2>
-                                
-                                <p className="text-base-content/70 mb-4">
-                                    Clique nos marcadores para ver os vendedores próximos a cada setor
-                                </p>
-                                
-                                <div className="rounded-lg overflow-hidden">
-                                    <MapaInterativo altura="400px" />
-                                </div>
-                                
-                                <div className="mt-4 flex flex-wrap gap-2">
-                                    <div className="badge badge-outline">
-                                        <div className="w-2 h-2 bg-primary rounded-full mr-2"></div>
-                                        CT - Centro de Tecnologia
-                                    </div>
-                                    <div className="badge badge-outline">
-                                        <div className="w-2 h-2 bg-secondary rounded-full mr-2"></div>
-                                        CCSA - C. C. Sociais Aplicadas
-                                    </div>
-                                    <div className="badge badge-outline">
-                                        <div className="w-2 h-2 bg-accent rounded-full mr-2"></div>
-                                        CB - Centro de Biociências
-                                    </div>
-                                    <div className="badge badge-outline">
-                                        <div className="w-2 h-2 bg-info rounded-full mr-2"></div>
-                                        IMD - Instituto M. Digital
-                                    </div>
-                                    <div className="badge badge-outline">
-                                        <div className="w-2 h-2 bg-warning rounded-full mr-2"></div>
-                                        PAC - Praça de Alimentação
-                                    </div>
-                                </div>
-                            </div>
+                {/* Mapa Principal */}
+                <div className="card bg-base-100 shadow-lg">
+                    <div className="card-body p-0">
+                        <div className="p-4 border-b border-base-300">
+                            <h2 className="card-title text-primary">
+                                <MapPin className="h-5 w-5" />
+                                Setores da UFRN
+                            </h2>
                         </div>
+                        
+                        <div className="rounded-b-lg overflow-hidden">
+                            <MapaSetores 
+                                altura="600px"
+                                dataFiltro={new Date().toISOString().split('T')[0]}
+                                onVendedorClick={(vendedor) => {
+                                    // Lógica para fazer reserva - implementar futuramente
+                                    console.log('Vendedor selecionado:', vendedor)
+                                }}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Legendas dos Setores */}
+                <div className="mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+                    <div className="flex items-center gap-2 p-3 bg-base-100 rounded-lg shadow-sm">
+                        <div className="w-3 h-3 bg-primary rounded-full"></div>
+                        <span className="text-sm font-medium">CT</span>
+                    </div>
+                    <div className="flex items-center gap-2 p-3 bg-base-100 rounded-lg shadow-sm">
+                        <div className="w-3 h-3 bg-secondary rounded-full"></div>
+                        <span className="text-sm font-medium">CCSA</span>
+                    </div>
+                    <div className="flex items-center gap-2 p-3 bg-base-100 rounded-lg shadow-sm">
+                        <div className="w-3 h-3 bg-accent rounded-full"></div>
+                        <span className="text-sm font-medium">CB</span>
+                    </div>
+                    <div className="flex items-center gap-2 p-3 bg-base-100 rounded-lg shadow-sm">
+                        <div className="w-3 h-3 bg-info rounded-full"></div>
+                        <span className="text-sm font-medium">IMD</span>
+                    </div>
+                    <div className="flex items-center gap-2 p-3 bg-base-100 rounded-lg shadow-sm">
+                        <div className="w-3 h-3 bg-warning rounded-full"></div>
+                        <span className="text-sm font-medium">PAC</span>
                     </div>
                 </div>
             </div>

@@ -1,8 +1,8 @@
 // Configuração da API do Food Campus Backend
-const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://foodcampusbackend-production.up.railway.app'
-  : 'http://localhost:8080'
-
+// const API_BASE_URL = process.env.NODE_ENV === 'production' 
+//   ? 'https://foodcampusbackend-production.up.railway.app'
+//   : 'http://localhost:8080'
+const API_BASE_URL = 'https://foodcampusbackend-production.up.railway.app'
 const API_VERSION = '/api/v1'
 
 // ========================
@@ -85,11 +85,11 @@ const getHeaders = (token?: string): HeadersInit => {
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
   }
-  
+
   if (token) {
     headers.Authorization = `Bearer ${token}`
   }
-  
+
   return headers
 }
 
@@ -117,7 +117,7 @@ const handleResponse = async <T>(response: Response): Promise<T> => {
       error
     )
   }
-  
+
   return await response.json()
 }
 
@@ -138,7 +138,7 @@ export const authAPI = {
       headers: getHeaders(),
       body: JSON.stringify(credentials),
     })
-    
+
     return handleResponse<ApiResponse<AuthenticatedUserResponse>>(response)
   },
 
@@ -173,7 +173,7 @@ export const customerAPI = {
       headers: getHeaders(),
       body: JSON.stringify(customerData),
     })
-    
+
     return handleResponse<ApiResponse>(response)
   }
 }
@@ -191,7 +191,7 @@ export const sellerAPI = {
       headers: getHeaders(),
       body: JSON.stringify(sellerData),
     })
-    
+
     return handleResponse<ApiResponse>(response)
   },
 
@@ -204,7 +204,7 @@ export const sellerAPI = {
       method: 'GET',
       headers: getHeaders(),
     })
-    
+
     return handleResponse<ApiResponse>(response)
   }
 }
@@ -223,7 +223,7 @@ export const productAPI = {
       headers: getHeaders(token || undefined),
       body: JSON.stringify(productData),
     })
-    
+
     return handleResponse<ApiResponse>(response)
   },
 
@@ -232,19 +232,19 @@ export const productAPI = {
    * @param storeCode - Código da loja (opcional)
    * @returns Promise com lista de produtos
    */
-  getAll: async (storeCode?: string): Promise<{products: ProductResponse[]}> => {
+  getAll: async (storeCode?: string): Promise<{ products: ProductResponse[] }> => {
     const url = new URL(`${API_BASE_URL}${API_VERSION}/products`)
-    
+
     if (storeCode) {
       url.searchParams.append('storeCode', storeCode)
     }
-    
+
     const response = await fetch(url.toString(), {
       method: 'GET',
       headers: getHeaders(),
     })
-    
-    return handleResponse<{products: ProductResponse[]}>(response)
+
+    return handleResponse<{ products: ProductResponse[] }>(response)
   }
 }
 
@@ -366,7 +366,7 @@ export const useApiError = () => {
           return error.message || 'Erro desconhecido'
       }
     }
-    
+
     return 'Erro de conexão. Verifique sua internet e tente novamente.'
   }
 
@@ -381,7 +381,7 @@ export const api = {
   get: async <T = any>(endpoint: string, params?: Record<string, any>): Promise<T> => {
     const token = authUtils.getToken()
     const url = new URL(`${API_BASE_URL}${endpoint}`)
-    
+
     if (params) {
       Object.entries(params).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
@@ -389,12 +389,12 @@ export const api = {
         }
       })
     }
-    
+
     const response = await fetch(url.toString(), {
       method: 'GET',
       headers: getHeaders(token || undefined),
     })
-    
+
     return handleResponse<T>(response)
   },
 
@@ -405,7 +405,7 @@ export const api = {
       headers: getHeaders(token || undefined),
       body: data ? JSON.stringify(data) : undefined,
     })
-    
+
     return handleResponse<T>(response)
   },
 
@@ -416,7 +416,7 @@ export const api = {
       headers: getHeaders(token || undefined),
       body: data ? JSON.stringify(data) : undefined,
     })
-    
+
     return handleResponse<T>(response)
   },
 
@@ -426,7 +426,7 @@ export const api = {
       method: 'DELETE',
       headers: getHeaders(token || undefined),
     })
-    
+
     return handleResponse<T>(response)
   }
 }

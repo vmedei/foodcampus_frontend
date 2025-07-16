@@ -5,6 +5,7 @@ import { MapPin, Info } from 'lucide-react'
 import { MapaSetores } from '@/components/mapa'
 import { useState } from 'react'
 import { Setor, VendedorAgendado } from '@/hooks/useSetores'
+import CarrouselProdutos from '../carrouselProdutos/CarrouselProdutos'
 
 export default function HomeCliente() {
     const { user } = useAuth()
@@ -28,7 +29,7 @@ export default function HomeCliente() {
                 <h1 className="text-3xl font-bold text-primary mb-6">
                     Bem-vindo(a), {user?.name || user?.email}
                 </h1>
-
+                <CarrouselProdutos />
                 {/* Mapa Principal */}
                 <div className="card bg-base-100 shadow-lg">
 
@@ -56,7 +57,7 @@ export default function HomeCliente() {
                             <div>
                                 <h3 className="font-bold">Como usar:</h3>
                                 <div className="text-sm">
-                                    Clique nos marcadores dos setores no mapa para ver os vendedores disponíveis. 
+                                    Clique nos marcadores dos setores no mapa para ver os vendedores disponíveis.
                                     Clique no card de um vendedor para ver seus produtos.
                                 </div>
                             </div>

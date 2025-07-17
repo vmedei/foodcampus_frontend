@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useImperativeHandle, forwardRef } from 'react'
-import { Package, Eye, Edit, AlertCircle, DollarSign } from 'lucide-react'
+import { Package, Eye, AlertCircle, DollarSign, Trash, HandPlatter, UtensilsCrossed } from 'lucide-react'
 import { productAPI, ProductResponse } from '@/lib/api'
 
 export interface ListaProdutosRef {
@@ -55,12 +55,29 @@ const ListaProdutos = forwardRef<ListaProdutosRef>((props, ref) => {
         }).format(preco)
     }
 
+    const removerProduto = async (produto: ProductResponse) => {
+        if (!produto.id) return
+        const confirmar = window.confirm(`Tem certeza que deseja remover o produto "${produto.name}"?`)
+        if (!confirmar) return
+        try {
+            setLoading(true)
+            setErro("")
+            await productAPI.remove(produto.id)
+            await carregarProdutos()
+        } catch (error: any) {
+            setErro("Erro ao remover produto")
+            console.error("Erro ao remover produto:", error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
     return (
         <div className="card bg-base-100 shadow-lg">
             <div className="card-body">
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="card-title text-primary">
-                        <Package className="h-5 w-5" />
+                        <UtensilsCrossed className="h-5 w-5" />
                         Meus Produtos
                     </h2>
                     <button 
@@ -106,7 +123,7 @@ const ListaProdutos = forwardRef<ListaProdutosRef>((props, ref) => {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {produtos.map((produto, index) => (
                             <div key={index} className="card bg-base-200 shadow-sm hover:shadow-md transition-all duration-200">
-                                <figure className="px-4 pt-4">
+                                <figure className="p-4">
                                     <img
                                         src={produto.base64Image}
                                         alt={produto.name}
@@ -128,6 +145,12 @@ const ListaProdutos = forwardRef<ListaProdutosRef>((props, ref) => {
                                             className="btn btn-ghost btn-sm"
                                         >
                                             <Eye className="h-4 w-4" />
+                                        </button>
+                                        <button
+                                            onClick={() => removerProduto(produto)}
+                                            className="btn btn-ghost btn-sm"
+                                        >
+                                            <Trash className="h-4 w-4 text-red-500" />
                                         </button>
                                     </div>
                                 </div>

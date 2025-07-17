@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Eye, EyeOff, GraduationCap, Store, ArrowLeft, Mail, KeyRound, User, Phone, IdCard } from 'lucide-react'
 import { customerAPI, sellerAPI, CreateCustomerRequest, CreateSellerRequest, useApiError, ClienteType } from '@/lib/api'
+import { InputMask } from '@react-input/mask'
 
 interface CadastroFormProps {
     tipo?: 'estudante' | 'vendedor'
@@ -30,9 +31,11 @@ export default function CadastroForm({ tipo: tipoInicial }: CadastroFormProps) {
     const [error, setError] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [success, setSuccess] = useState('')
-    
+
     const router = useRouter()
     const { handleApiError } = useApiError()
+
+    const convertToNumber = (valor: string) => valor.replace(/\D/g, '')
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -50,46 +53,46 @@ export default function CadastroForm({ tipo: tipoInicial }: CadastroFormProps) {
             if (tipoSelecionado === 'estudante') {
                 const customerData: CreateCustomerRequest = {
                     name: formData.nome,
-                    cpf: formData.cpf,
-                    phone: formData.telefone,
+                    cpf: convertToNumber(formData.cpf),
+                    phone: convertToNumber(formData.telefone),
                     tipo: formData.tipoCliente,
                     user: {
                         email: formData.email,
                         password: formData.password
                     }
                 }
-                
+
                 await customerAPI.create(customerData)
                 setSuccess('Conta de estudante criada com sucesso! Faça login para continuar.')
-                
+
                 // Redirecionar para login após 2 segundos
                 setTimeout(() => {
                     router.push('/auth?mode=login')
                 }, 2000)
-                
+
             } else {
                 const sellerData: CreateSellerRequest = {
                     name: formData.nome,
                     fantasyName: formData.nomeFantasia,
-                    cpf: formData.cpf,
-                    cnpj: formData.cnpj,
-                    phone: formData.telefone,
+                    cpf: convertToNumber(formData.cpf),
+                    cnpj: convertToNumber(formData.cnpj),
+                    phone: convertToNumber(formData.telefone),
                     description: formData.descricao,
                     user: {
                         email: formData.email,
                         password: formData.password
                     }
                 }
-                
+
                 await sellerAPI.create(sellerData)
                 setSuccess('Conta de vendedor criada com sucesso! Faça login para continuar.')
-                
+
                 // Redirecionar para login após 2 segundos
                 setTimeout(() => {
                     router.push('/auth?mode=login')
                 }, 2000)
             }
-            
+
         } catch (error) {
             setError(handleApiError(error))
         } finally {
@@ -144,19 +147,19 @@ export default function CadastroForm({ tipo: tipoInicial }: CadastroFormProps) {
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div className="flex justify-center w-full">
                                 <div className="join">
-                                    <input 
-                                        className="join-item btn" 
-                                        type="radio" 
-                                        name="tipo" 
+                                    <input
+                                        className="join-item btn"
+                                        type="radio"
+                                        name="tipo"
                                         aria-label="Estudante"
                                         checked={tipoSelecionado === 'estudante'}
                                         onChange={() => setTipoSelecionado('estudante')}
                                         disabled={isLoading}
                                     />
-                                    <input 
-                                        className="join-item btn" 
-                                        type="radio" 
-                                        name="tipo" 
+                                    <input
+                                        className="join-item btn"
+                                        type="radio"
+                                        name="tipo"
                                         aria-label="Vendedor"
                                         checked={tipoSelecionado === 'vendedor'}
                                         onChange={() => setTipoSelecionado('vendedor')}
@@ -213,7 +216,18 @@ export default function CadastroForm({ tipo: tipoInicial }: CadastroFormProps) {
                                     <div className="grid grid-cols-2 gap-2">
                                         <label className="input w-full">
                                             <IdCard className="h-4 w-4 opacity-70" />
-                                            <input
+                                            <InputMask
+                                                mask="___.___.___-__"
+                                                replacement={{ _: /\d/ }}
+                                                name="cpf"
+                                                value={formData.cpf}
+                                                onChange={handleChange}
+                                                className="grow"
+                                                placeholder="CPF"
+                                                required
+                                                disabled={isLoading}
+                                            />
+                                            {/* <input
                                                 type="text"
                                                 name="cpf"
                                                 value={formData.cpf}
@@ -223,11 +237,22 @@ export default function CadastroForm({ tipo: tipoInicial }: CadastroFormProps) {
                                                 maxLength={11}
                                                 required
                                                 disabled={isLoading}
-                                            />
+                                            /> */}
                                         </label>
 
                                         <label className="input w-full">
-                                            <input
+                                            <InputMask
+                                                mask="__.___.___/____-__"
+                                                name='cnpj'
+                                                replacement={{ _: /\d/ }}
+                                                value={formData.cnpj}
+                                                onChange={handleChange}
+                                                className="grow"
+                                                placeholder="CNPJ"
+                                                required
+                                                disabled={isLoading}
+                                            />
+                                            {/* <input
                                                 type="text"
                                                 name="cnpj"
                                                 value={formData.cnpj}
@@ -237,13 +262,24 @@ export default function CadastroForm({ tipo: tipoInicial }: CadastroFormProps) {
                                                 maxLength={14}
                                                 required
                                                 disabled={isLoading}
-                                            />
+                                            /> */}
                                         </label>
                                     </div>
 
                                     <label className="input w-full">
                                         <Phone className="h-4 w-4 opacity-70" />
-                                        <input
+                                        <InputMask
+                                            mask='(__) ____-____'
+                                            name='telefone'
+                                            replacement={{ _: /\d/ }}
+                                            value={formData.telefone}
+                                            onChange={handleChange}
+                                            className="grow"
+                                            placeholder="Telefone"
+                                            required
+                                            disabled={isLoading}
+                                        />
+                                        {/* <input
                                             type="tel"
                                             name="telefone"
                                             value={formData.telefone}
@@ -253,7 +289,7 @@ export default function CadastroForm({ tipo: tipoInicial }: CadastroFormProps) {
                                             maxLength={15}
                                             required
                                             disabled={isLoading}
-                                        />
+                                        /> */}
                                     </label>
 
                                     <textarea
@@ -289,14 +325,14 @@ export default function CadastroForm({ tipo: tipoInicial }: CadastroFormProps) {
 
                                     <label className="input w-full">
                                         <IdCard className="h-4 w-4 opacity-70" />
-                                        <input
-                                            type="text"
+                                        <InputMask
+                                            mask="___.___.___-__"
+                                            replacement={{ _: /\d/ }}
                                             name="cpf"
                                             value={formData.cpf}
                                             onChange={handleChange}
                                             className="grow"
                                             placeholder="CPF"
-                                            maxLength={11}
                                             required
                                             disabled={isLoading}
                                         />
@@ -304,14 +340,14 @@ export default function CadastroForm({ tipo: tipoInicial }: CadastroFormProps) {
 
                                     <label className="input w-full">
                                         <Phone className="h-4 w-4 opacity-70" />
-                                        <input
-                                            type="tel"
-                                            name="telefone"
+                                        <InputMask
+                                            mask='(__) ____-____'
+                                            name='telefone'
+                                            replacement={{ _: /\d/ }}
                                             value={formData.telefone}
                                             onChange={handleChange}
                                             className="grow"
                                             placeholder="Telefone"
-                                            maxLength={15}
                                             required
                                             disabled={isLoading}
                                         />

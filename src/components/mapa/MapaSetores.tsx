@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react'
 import { MapContainer, TileLayer, Marker, Polygon } from 'react-leaflet'
 import L from 'leaflet'
 import { useSetores, Setor, VendedorAgendado } from '@/hooks/useSetores'
-import { Phone, Clock, MapPin, Users, Calendar, AlertCircle, X, Info } from 'lucide-react'
+import { Phone, Clock, MapPin, Users, Calendar, AlertCircle, X, Info, Package } from 'lucide-react'
+import ModalProdutosVendedor from './ModalProdutosVendedor'
 
 // Configuração do ícone padrão do Leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl
@@ -38,6 +39,8 @@ export default function MapaSetores({
     const [carregandoVendedores, setCarregandoVendedores] = useState(false)
     const [setorSidebarAberto, setSetorSidebarAberto] = useState<Setor | null>(null)
     const [sidebarAberta, setSidebarAberta] = useState(false)
+    const [modalProdutosAberto, setModalProdutosAberto] = useState(false)
+    const [vendedorSelecionado, setVendedorSelecionado] = useState<VendedorAgendado | null>(null)
 
     // Posição central da UFRN
     const posicaoUFRN: [number, number] = [-5.8370, -35.2041]
@@ -101,6 +104,21 @@ export default function MapaSetores({
         onSetorSelecionado?.(null as unknown as Setor)
     }
 
+    const handleVendedorClick = (vendedor: VendedorAgendado) => {
+        setVendedorSelecionado(vendedor)
+        setModalProdutosAberto(true)
+        
+        // Notificar componente pai sobre clique no vendedor
+        if (onVendedorClick) {
+            onVendedorClick(vendedor)
+        }
+    }
+
+    const fecharModalProdutos = () => {
+        setModalProdutosAberto(false)
+        setVendedorSelecionado(null)
+    }
+
     // Sincronizar setor selecionado externamente com sidebar
     useEffect(() => {
         if (setorSelecionado && setorSelecionado.id !== setorSidebarAberto?.id) {
@@ -159,7 +177,6 @@ export default function MapaSetores({
                 >
                     <TileLayer
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     />
 
                     {setoresComVendedores.map((setor) => (
@@ -194,7 +211,7 @@ export default function MapaSetores({
                 {/* Seletor de setores no canto inferior esquerdo */}
                 {mostrarSeletorSetores &&
                     <div
-                        className="absolute left-4 bottom-4 z-[1000] bg-base-100 rounded-lg shadow-lg p-2 flex items-center gap-2"
+                        className="absolute left-4 bottom-4 z-[400] bg-base-100 rounded-lg shadow-lg p-2 flex items-center gap-2"
                         style={{ minWidth: 220 }}
                     >
                         {!carregandoVendedores ? (
@@ -322,7 +339,7 @@ export default function MapaSetores({
                                             <div
                                                 key={vendedor.agendamentoId}
                                                 className="card bg-base-200 shadow-sm cursor-pointer hover:shadow-md transition-all duration-200 hover:bg-base-300"
-                                                onClick={() => onVendedorClick?.(vendedor)}
+                                                onClick={() => handleVendedorClick(vendedor)}
                                             >
                                                 <div className="card-body p-4">
                                                     <div className="flex justify-between items-start mb-3">
@@ -361,10 +378,18 @@ export default function MapaSetores({
                                                                 })}
                                                             </span>
                                                         </div>
-                                                        <div className="flex items-center gap-2">
-                                                            <Phone className="h-4 w-4 text-secondary shrink-0" />
-                                                            <span className="font-mono">{vendedor.telefone}</span>
-                                                        </div>
+                                                                                                            <div className="flex items-center gap-2">
+                                                        <Phone className="h-4 w-4 text-secondary shrink-0" />
+                                                        <span className="font-mono">{vendedor.telefone}</span>
+                                                    </div>
+                                                    
+                                                    {/* Indicador de produtos */}
+                                                    <div className="flex items-center gap-2 mt-2">
+                                                        <Package className="h-4 w-4 text-primary shrink-0" />
+                                                        <span className="text-sm text-primary font-medium">
+                                                            Ver produtos
+                                                        </span>
+                                                    </div>
                                                     </div>
 
                                                     {vendedor.observacoes && (
@@ -392,6 +417,15 @@ export default function MapaSetores({
                     </div>
                 )}
             </div>
+
+            {/* Modal de Produtos */}
+            {modalProdutosAberto && vendedorSelecionado && (
+                <ModalProdutosVendedor
+                    vendedor={vendedorSelecionado}
+                    isOpen={modalProdutosAberto}
+                    onClose={fecharModalProdutos}
+                />
+            )}
         </div>
     )
 } 

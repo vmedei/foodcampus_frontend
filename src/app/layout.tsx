@@ -3,6 +3,7 @@ import { Open_Sans } from "next/font/google";
 import "./globals.css";
 import Wrapper from "@/components/Wrapper";
 import Header from "@/components/header/Header";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 const openSans = Open_Sans({
   subsets: ['latin']
@@ -23,10 +24,12 @@ export default function RootLayout({
       <body
         className={`${openSans.className} antialiased flex flex-col h-screen`}
       >
-        <Header />
-        <Wrapper>
-          {children}
-        </Wrapper>
+        <AuthProvider>
+          <Header />
+          <Wrapper>
+            {children}
+          </Wrapper>
+        </AuthProvider>
       </body>
     </html>
   );

@@ -2,11 +2,11 @@
 
 import { useAuth } from '@/hooks/useAuth'
 import { useRef, useEffect, useState } from 'react'
-import AgendamentoSetor from '@/components/vendedor/AgendamentoSetor'
+import AgendamentoSetor from '@/components/vendedor/agendamento/AgendamentoSetor'
 import CadastroProduto from '@/components/vendedor/CadastroProduto'
 import ListaProdutos, { ListaProdutosRef } from '@/components/vendedor/ListaProdutos'
 import MapaSetores from '../mapa/MapaSetores'
-import ModalConfirmacaoStatus from '@/components/vendedor/ModalConfirmacaoStatus'
+import ModalConfirmacaoStatus from '@/components/vendedor/agendamento/ModalConfirmacaoStatus'
 import { useSetores, VendedorAgendado } from '@/hooks/useSetores'
 
 export default function HomeVendedor() {

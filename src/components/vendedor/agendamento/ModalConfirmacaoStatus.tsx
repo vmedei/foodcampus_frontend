@@ -41,7 +41,7 @@ export default function ModalConfirmacaoStatus({
                 
                 <div className="space-y-4">
                     <p className="text-base-content/80">
-                        Você possui um agendamento ativo no setor <strong>{agendamento.setor?.sigla}</strong> 
+                        Você possui um agendamento ativo no setor <strong>{agendamento.setor?.sigla} </strong> 
                         que está dentro do horário programado.
                     </p>
                     

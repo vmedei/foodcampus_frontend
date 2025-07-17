@@ -52,10 +52,11 @@ export interface CreateProductRequest {
 }
 
 export interface ProductResponse {
-  name: string
-  description: string
-  price: number
-  base64Image: string
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  base64Image: string;
 }
 
 // Response Types
@@ -246,6 +247,14 @@ export const productAPI = {
     })
     
     return handleResponse<{products: ProductResponse[]}>(response)
+  },
+  remove: async (id: number): Promise<{ message: string }> => {
+    const token = authUtils.getToken()
+    const response = await fetch(`${API_BASE_URL}${API_VERSION}/products/${id}`, {
+      method: 'DELETE',
+      headers: getHeaders(token || undefined),
+    })
+    return handleResponse<{ message: string }>(response)
   }
 }
 

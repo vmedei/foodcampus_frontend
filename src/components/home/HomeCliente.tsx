@@ -1,18 +1,19 @@
 'use client'
 
 import { useAuth } from '@/hooks/useAuth'
-import { MapPin, Info } from 'lucide-react'
+import { MapPin, Info, ClipboardList } from 'lucide-react'
 import { MapaSetores } from '@/components/mapa'
 import { useState } from 'react'
 import { Setor, VendedorAgendado } from '@/hooks/useSetores'
 import CarrouselProdutos from '../carrouselProdutos/CarrouselProdutos'
 import ListaProdutos from '../listaProdutos/ListaProdutos'
+import ListaReservas from '../cliente/ListaReservas'
 
 export default function HomeCliente() {
     const { user } = useAuth()
 
     const [setorSelecionado, setSetorSelecionado] = useState<Setor | null>(null)
-    const [tipoSelecionado, setTipoSelecionado] = useState<'produtos' | 'mapa'>('produtos')
+    const [tipoSelecionado, setTipoSelecionado] = useState<'produtos' | 'mapa' | 'reservas'>('mapa')
 
     const handleSetorSelecionado = (setor: Setor) => {
         setSetorSelecionado(setor)
@@ -38,24 +39,35 @@ export default function HomeCliente() {
                             className="join-item btn" 
                             type="radio" 
                             name="tipo" 
-                            aria-label="Produtos"
-                            checked={tipoSelecionado === 'produtos'}
-                            onChange={() => setTipoSelecionado('produtos')}
-                            
+                            aria-label="Mapa"
+                            checked={tipoSelecionado === 'mapa'}
+                            onChange={() => setTipoSelecionado('mapa')}
                         />
                         <input 
                             className="join-item btn" 
                             type="radio" 
                             name="tipo" 
-                            aria-label="Mapa"
-                            checked={tipoSelecionado === 'mapa'}
-                            onChange={() => setTipoSelecionado('mapa')}
+                            aria-label="Produtos"
+                            checked={tipoSelecionado === 'produtos'}
+                            onChange={() => setTipoSelecionado('produtos')}
+                        />
+                        <input 
+                            className="join-item btn" 
+                            type="radio" 
+                            name="tipo" 
+                            aria-label="Reservas"
+                            checked={tipoSelecionado === 'reservas'}
+                            onChange={() => setTipoSelecionado('reservas')}
                         />
                     </div>
                 </div>
 
                 {tipoSelecionado === "produtos" &&
                     <ListaProdutos />
+                }
+
+                {tipoSelecionado === "reservas" &&
+                    <ListaReservas />
                 }
 
                 {tipoSelecionado === "mapa" &&

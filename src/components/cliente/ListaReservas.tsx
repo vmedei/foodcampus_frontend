@@ -110,7 +110,7 @@ export default function ListaReservas() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Filter className="h-4 w-4 text-base-content/60" />
+          <Filter className="h-6 w-6 text-base-content/60" />
           <select
             value={filtroStatus}
             onChange={(e) => setFiltroStatus(e.target.value as any)}
@@ -136,7 +136,7 @@ export default function ListaReservas() {
                 {/* Header da reserva */}
                 <div className="flex justify-between items-start mb-4">
                   <div className="flex items-center gap-3">
-                    <span className={`badge ${getStatusColor(reserva.status)}`}>
+                    <span className={`badge font-bold ${getStatusColor(reserva.status)}`}>
                       {getStatusText(reserva.status)}
                     </span>
                     <span className="text-sm text-base-content/60">
@@ -159,7 +159,7 @@ export default function ListaReservas() {
                 {produto && (
                   <div className="flex items-start gap-4 mb-4">
                     <div className="flex-1">
-                      <h3 className="font-semibold flex items-center gap-2">
+                      <h3 className="font-bold text-xl flex items-center gap-2">
                         <Package className="h-4 w-4 text-primary" />
                         {produto.nome}
                       </h3>
@@ -168,14 +168,13 @@ export default function ListaReservas() {
                       </p>
                       <div className="flex items-center gap-4 text-sm">
                         <span className="flex items-center gap-1">
-                          <DollarSign className="h-4 w-4 text-primary" />
-                          {formatarPreco(produto.preco)} cada
+                          <span className='font-semibold'>{formatarPreco(produto.preco)}</span>
                         </span>
-                        <span className="text-base-content/70">
-                          Quantidade: {reserva.quantidade}
+                        <span className="text-black">
+                          <span className='font-semibold'>Quantidade:</span> {reserva.quantidade}
                         </span>
                         <span className="font-semibold text-primary">
-                          Total: {formatarPreco(produto.preco * reserva.quantidade)}
+                          <span className='text-black font-semibold'>Total:</span>{formatarPreco(produto.preco * reserva.quantidade)}
                         </span>
                       </div>
                     </div>

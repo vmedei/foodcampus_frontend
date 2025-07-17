@@ -80,6 +80,12 @@ const ListaProdutos = forwardRef<ListaProdutosRef>((props, ref) => {
 
     return (
         <div>
+            {loading && 
+                <div className="flex gap-2 justify-center items-center py-8">
+                    <span className="loading loading-spinner loading-lg text-primary"></span>
+                    Carregando produtos...
+                </div>
+            }
             {!loading && produtos.length === 0 && (
                 <div className="text-center py-12">
                     <Package className="h-12 w-12 text-base-content/30 mx-auto mb-4" />
@@ -106,7 +112,6 @@ const ListaProdutos = forwardRef<ListaProdutosRef>((props, ref) => {
                                     </p>
                                     <div className="flex items-center justify-between mt-2">
                                         <span className="text-lg font-bold text-primary flex items-center gap-1">
-                                            <DollarSign className="h-4 w-4" />
                                             {formatarPreco(produto.price)}
                                         </span>
                                         <button

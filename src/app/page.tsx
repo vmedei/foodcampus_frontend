@@ -56,7 +56,7 @@ export default function Home() {
                             Conectando <span className="text-secondary font-bold">Fome</span> e <span className="text-secondary font-bold">Sabor</span>
                         </h1>
 
-                        <p className="text-xl max-w-3xl mx-auto opacity-90">
+                        <p className="text-xl max-w-3xl mx-auto opacity-90 text-primary-content">
                             Plataforma inovadora que conecta estudantes da UFRN com Vendedores locais,
                             facilitando a descoberta e compra de alimentos no campus.
                         </p>
@@ -164,7 +164,7 @@ export default function Home() {
                 </section>
 
                 {/* Funcionalidades */}
-                <section id="funcionalidades" className="p-10 bg-base-200 rounded-lg border border-base-300">
+                <section id="funcionalidades" className="p-10 rounded-lg">
 
                     <div className="container space-y-8">
 
@@ -179,137 +179,57 @@ export default function Home() {
 
                         <div className="grid grid-cols-2 gap-8">
 
-                            <div className="card bg-base-100 shadow-xl">
+                            <div className="card bg-secondary text-primary shadow-xl hover:scale-105 transition-all duration-300">
                                 <div className="card-body">
-                                    <h3 className="card-title text-primary flex items-center">
-                                        <Users className="h-6 w-6 mr-2 text-secondary" />
+                                    <h3 className="card-title    flex items-center">
+                                        <Users className="h-6 w-6 mr-2" />
                                         Para Estudantes
                                     </h3>
-                                    <ul className="space-y-3 text-base-content">
+                                    <ul className="space-y-3">
                                         <li className="flex items-center">
-                                            <ArrowRight className="h-4 w-4 mr-2 text-secondary" />
+                                            <ArrowRight className="h-4 w-4 mr-2" />
                                             Busca por alimentos por localização
                                         </li>
                                         <li className="flex items-center">
-                                            <ArrowRight className="h-4 w-4 mr-2 text-secondary" />
+                                            <ArrowRight className="h-4 w-4 mr-2" />
                                             Visualização de cardápios e preços
                                         </li>
                                         <li className="flex items-center">
-                                            <ArrowRight className="h-4 w-4 mr-2 text-secondary" />
+                                            <ArrowRight className="h-4 w-4 mr-2" />
                                             Sistema de avaliações e comentários
                                         </li>
                                         <li className="flex items-center">
-                                            <ArrowRight className="h-4 w-4 mr-2 text-secondary" />
+                                            <ArrowRight className="h-4 w-4 mr-2" />
                                             Filtros por tipo de comida, preço e distância
                                         </li>
                                     </ul>
                                 </div>
                             </div>
 
-                            <div className="card bg-base-100 shadow-xl">
+                            <div className="card bg-primary text-secondary shadow-xl hover:scale-105 transition-all duration-300">
                                 <div className="card-body">
-                                    <h3 className="card-title text-primary flex items-center">
-                                        <ShoppingCart className="h-6 w-6 mr-2 text-secondary" />
+                                    <h3 className="card-title flex items-center">
+                                        <ShoppingCart className="h-6 w-6 mr-2" />
                                         Para Vendedores
                                     </h3>
-                                    <ul className="space-y-3 text-base-content">
+                                    <ul className="space-y-3">
                                         <li className="flex items-center">
-                                            <ArrowRight className="h-4 w-4 mr-2 text-secondary" />
+                                            <ArrowRight className="h-4 w-4 mr-2" />
                                             Cadastro e gerenciamento de produtos
                                         </li>
                                         <li className="flex items-center">
-                                            <ArrowRight className="h-4 w-4 mr-2 text-secondary" />
+                                            <ArrowRight className="h-4 w-4 mr-2" />
                                             Upload de fotos e descrições
                                         </li>
                                         <li className="flex items-center">
-                                            <ArrowRight className="h-4 w-4 mr-2 text-secondary" />
+                                            <ArrowRight className="h-4 w-4 mr-2" />
                                             Controle de disponibilidade
                                         </li>
                                         <li className="flex items-center">
-                                            <ArrowRight className="h-4 w-4 mr-2 text-secondary" />
+                                            <ArrowRight className="h-4 w-4 mr-2" />
                                             Dashboard de vendas
                                         </li>
                                     </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                {/* Tecnologias */}
-                <section id="tecnologias" className="p-10">
-
-                    <div className="container space-y-8">
-
-                        <div className="text-center space-y-4">
-                            <h2 className="text-3xl md:text-4xl font-bold text-primary">
-                                Tecnologias Utilizadas
-                            </h2>
-                            <p className="text-lg text-base-content max-w-2xl mx-auto">
-                                Stack moderna e robusta para garantir performance e escalabilidade
-                            </p>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-8">
-                            <div className="card bg-primary text-primary-content">
-                                <div className="card-body">
-                                    <h3 className="card-title flex items-center">
-                                        <Code className="h-6 w-6 mr-2 text-secondary" />
-                                        Frontend
-                                    </h3>
-                                    <div className="space-y-3">
-                                        <div className="flex justify-between items-center">
-                                            <span>React.js</span>
-                                            <span className="text-secondary">18.x</span>
-                                        </div>
-                                        <div className="flex justify-between items-center">
-                                            <span>Next.js</span>
-                                            <span className="text-secondary">14.x</span>
-                                        </div>
-                                        <div className="flex justify-between items-center">
-                                            <span>TypeScript</span>
-                                            <span className="text-secondary">5.x</span>
-                                        </div>
-                                        <div className="flex justify-between items-center">
-                                            <span>Tailwind CSS</span>
-                                            <span className="text-secondary">3.x</span>
-                                        </div>
-                                        <div className="flex justify-between items-center">
-                                            <span>DaisyUI</span>
-                                            <span className="text-secondary">Latest</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="card bg-secondary text-secondary-content">
-                                <div className="card-body">
-                                    <h3 className="card-title flex items-center">
-                                        <Database className="h-6 w-6 mr-2 text-secondary-content" />
-                                        Backend
-                                    </h3>
-                                    <div className="space-y-3">
-                                        <div className="flex justify-between items-center">
-                                            <span>Java</span>
-                                            <span className="text-secondary-content">17</span>
-                                        </div>
-                                        <div className="flex justify-between items-center">
-                                            <span>Spring Boot</span>
-                                            <span className="text-secondary-content">3.5.3</span>
-                                        </div>
-                                        <div className="flex justify-between items-center">
-                                            <span>Spring Security</span>
-                                            <span className="text-secondary-content">6.x</span>
-                                        </div>
-                                        <div className="flex justify-between items-center">
-                                            <span>Spring Data JPA</span>
-                                            <span className="text-secondary-content">3.x</span>
-                                        </div>
-                                        <div className="flex justify-between items-center">
-                                            <span>MySQL</span>
-                                            <span className="text-secondary-content">8.x</span>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>

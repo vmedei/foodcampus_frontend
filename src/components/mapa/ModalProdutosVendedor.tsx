@@ -48,7 +48,7 @@ export default function ModalProdutosVendedor({ vendedor, isOpen, onClose }: Mod
     if (!isOpen || !vendedor) return null
 
     return (
-        <div className="modal modal-open">
+        <div className="modal modal-open z-[9999]">
             <div className="modal-box max-w-2xl">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6">

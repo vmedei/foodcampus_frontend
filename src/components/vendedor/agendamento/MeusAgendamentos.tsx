@@ -109,7 +109,7 @@ export default function MeusAgendamentos({
                         {agendamentosFiltrados.length} de {agendamentos.length} agendamentos
                     </span>
                     <label className="label cursor-pointer gap-2">
-                        <span className="label-text text-sm">Apenas ativos</span>
+                        <span className="label-text text-sm">Apenas ativos / agendados</span>
                         <input
                             type="checkbox"
                             className="toggle toggle-primary toggle-sm"

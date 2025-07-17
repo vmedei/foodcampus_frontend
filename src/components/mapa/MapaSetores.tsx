@@ -177,7 +177,6 @@ export default function MapaSetores({
                 >
                     <TileLayer
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     />
 
                     {setoresComVendedores.map((setor) => (
@@ -212,7 +211,7 @@ export default function MapaSetores({
                 {/* Seletor de setores no canto inferior esquerdo */}
                 {mostrarSeletorSetores &&
                     <div
-                        className="absolute left-4 bottom-4 z-[1000] bg-base-100 rounded-lg shadow-lg p-2 flex items-center gap-2"
+                        className="absolute left-4 bottom-4 z-[400] bg-base-100 rounded-lg shadow-lg p-2 flex items-center gap-2"
                         style={{ minWidth: 220 }}
                     >
                         {!carregandoVendedores ? (

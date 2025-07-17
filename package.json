@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@react-input/mask": "^2.0.4",
     "daisyui": "^5.0.46",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.525.0",

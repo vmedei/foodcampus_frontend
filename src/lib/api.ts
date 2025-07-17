@@ -52,10 +52,11 @@ export interface CreateProductRequest {
 }
 
 export interface ProductResponse {
-  name: string
-  description: string
-  price: number
-  base64Image: string
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  base64Image: string;
 }
 
 // Response Types
@@ -232,7 +233,9 @@ export const productAPI = {
    * @param storeCode - Código da loja (opcional)
    * @returns Promise com lista de produtos
    */
-  getAll: async (storeCode?: string): Promise<{ products: ProductResponse[] }> => {
+
+  getAll: async (storeCode?: string): Promise<{products: ProductResponse[]}> => {
+    const token = authUtils.getToken()
     const url = new URL(`${API_BASE_URL}${API_VERSION}/products`)
 
     if (storeCode) {
@@ -241,10 +244,18 @@ export const productAPI = {
 
     const response = await fetch(url.toString(), {
       method: 'GET',
-      headers: getHeaders(),
+      headers: getHeaders(token || undefined),
     })
-
-    return handleResponse<{ products: ProductResponse[] }>(response)
+    
+    return handleResponse<{products: ProductResponse[]}>(response)
+  },
+  remove: async (id: number): Promise<{ message: string }> => {
+    const token = authUtils.getToken()
+    const response = await fetch(`${API_BASE_URL}${API_VERSION}/products/${id}`, {
+      method: 'DELETE',
+      headers: getHeaders(token || undefined),
+    })
+    return handleResponse<{ message: string }>(response)
   }
 }
 

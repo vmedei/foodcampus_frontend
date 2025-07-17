@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useImperativeHandle, forwardRef } from 'react'
-import { Package, Eye, Edit, AlertCircle, DollarSign } from 'lucide-react'
+import { Package, Eye, AlertCircle, DollarSign, Trash, HandPlatter, UtensilsCrossed } from 'lucide-react'
 import { productAPI, ProductResponse } from '@/lib/api'
 
 export interface ListaProdutosRef {
@@ -55,15 +55,32 @@ const ListaProdutos = forwardRef<ListaProdutosRef>((props, ref) => {
         }).format(preco)
     }
 
+    const removerProduto = async (produto: ProductResponse) => {
+        if (!produto.id) return
+        const confirmar = window.confirm(`Tem certeza que deseja remover o produto "${produto.name}"?`)
+        if (!confirmar) return
+        try {
+            setLoading(true)
+            setErro("")
+            await productAPI.remove(produto.id)
+            await carregarProdutos()
+        } catch (error: any) {
+            setErro("Erro ao remover produto")
+            console.error("Erro ao remover produto:", error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
     return (
         <div className="card bg-base-100 shadow-lg">
             <div className="card-body">
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="card-title text-primary">
-                        <Package className="h-5 w-5" />
+                        <UtensilsCrossed className="h-5 w-5" />
                         Meus Produtos
                     </h2>
-                    <button 
+                    <button
                         onClick={carregarProdutos}
                         className="btn btn-ghost btn-sm"
                         disabled={loading}
@@ -103,10 +120,10 @@ const ListaProdutos = forwardRef<ListaProdutosRef>((props, ref) => {
                 )}
 
                 {!loading && produtos.length > 0 && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {produtos.map((produto, index) => (
                             <div key={index} className="card bg-base-200 shadow-sm hover:shadow-md transition-all duration-200">
-                                <figure className="px-4 pt-4">
+                                <figure className="p-4">
                                     <img
                                         src={produto.base64Image}
                                         alt={produto.name}
@@ -114,21 +131,29 @@ const ListaProdutos = forwardRef<ListaProdutosRef>((props, ref) => {
                                     />
                                 </figure>
                                 <div className="card-body p-4">
-                                    <h3 className="card-title text-base">{produto.name}</h3>
+                                    <h3 className="card-title text-base font-bold">{produto.name}</h3>
                                     <p className="text-sm text-base-content/70 line-clamp-2">
                                         {produto.description}
                                     </p>
-                                    <div className="flex items-center justify-between mt-2">
+                                    <div className="flex flex-col items-start mt-2">
                                         <span className="text-lg font-bold text-primary flex items-center gap-1">
-                                            <DollarSign className="h-4 w-4" />
                                             {formatarPreco(produto.price)}
                                         </span>
-                                        <button
-                                            onClick={() => abrirModal(produto)}
-                                            className="btn btn-ghost btn-sm"
-                                        >
-                                            <Eye className="h-4 w-4" />
-                                        </button>
+                                        <div className='w-full flex items-center justify-between gap-2 mt-2'>
+                                            <button
+                                                onClick={() => abrirModal(produto)}
+                                                className="btn btn-primary btn-sm px-7"
+                                            >
+                                                Ver mais
+                                            </button>
+                                            <button
+                                                onClick={() => removerProduto(produto)}
+                                                className="btn btn-ghost btn-sm px-2 py-3 rounded-full hover:bg-red-100 hover:text-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                                            >
+                                                <Trash className="h-5 w-5 text-red-500" />
+                                            </button>
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -145,7 +170,7 @@ const ListaProdutos = forwardRef<ListaProdutosRef>((props, ref) => {
                             <form method="dialog">
                                 <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                             </form>
-                            
+
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-4">
                                     <img
@@ -154,7 +179,7 @@ const ListaProdutos = forwardRef<ListaProdutosRef>((props, ref) => {
                                         className="w-full h-48 object-cover rounded-lg"
                                     />
                                 </div>
-                                
+
                                 <div className="space-y-4">
                                     <div>
                                         <h3 className="text-xl font-bold text-primary mb-2">
@@ -164,7 +189,7 @@ const ListaProdutos = forwardRef<ListaProdutosRef>((props, ref) => {
                                             {produtoSelecionado.description}
                                         </p>
                                     </div>
-                                    
+
                                     <div className="bg-secondary/10 p-4 rounded-lg">
                                         <p className="text-secondary font-semibold text-2xl flex items-center gap-2">
                                             <DollarSign className="h-6 w-6" />

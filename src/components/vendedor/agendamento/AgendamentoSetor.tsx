@@ -5,10 +5,13 @@ import { useSetores, Setor, VendedorAgendado } from '@/hooks/useSetores'
 import { Calendar, Clock, MapPin, Save, AlertCircle, CheckCircle, List, Map, Eye } from 'lucide-react'
 import { MapaSetores } from '../../mapa'
 import StatusModal from './StatusModal'
+import MeusAgendamentos from './MeusAgendamentos'
+import ReservasList from './ReservasList'
+import { reservasMock } from './mockReservas'
 
 export default function AgendamentoSetor() {
     const { setores, agendarVendedor, carregarMeusAgendamentos, atualizarStatusAgendamento } = useSetores()
-    const [visualizacao, setVisualizacao] = useState<'mapa' | 'agendamentos'>('mapa')
+    const [visualizacao, setVisualizacao] = useState<'mapa' | 'agendamentos' | 'reservas'>('mapa')
     const [agendamentos, setAgendamentos] = useState<VendedorAgendado[]>([])
     const [loadingAgendamentos, setLoadingAgendamentos] = useState(false)
     const [setorSelecionadoMapa, setSetorSelecionadoMapa] = useState<Setor | null>(null)
@@ -357,94 +360,34 @@ export default function AgendamentoSetor() {
                             checked={visualizacao === 'agendamentos'}
                             onChange={() => setVisualizacao('agendamentos')}
                         />
+                        <input
+                            className="join-item btn"
+                            type="radio"
+                            name="visualizacao"
+                            aria-label="Reservas"
+                            checked={visualizacao === 'reservas'}
+                            onChange={() => setVisualizacao('reservas')}
+                        />
                     </div>
                 </div>
 
                 {/* Conteúdo baseado na visualização selecionada */}
                 {visualizacao === 'mapa' ? (
-                <MapaSetores
-                    largura='100%'
-                    altura='600px'
+                    <MapaSetores
+                        largura='100%'
+                        altura='600px'
                         setorSelecionado={setorSelecionadoMapa}
                         onSetorSelecionado={handleSetorSelecionadoMapa}
                     />
+                ) : visualizacao === 'agendamentos' ? (
+                    <MeusAgendamentos
+                        agendamentos={agendamentos}
+                        setores={setores}
+                        loading={loadingAgendamentos}
+                        onAgendamentosChange={setAgendamentos}
+                    />
                 ) : (
-                    <div className="p-4">
-                        <div className="flex justify-between items-center mb-4">
-                            <h3 className="text-lg font-semibold flex items-center gap-2">
-                                <List className="h-5 w-5" />
-                                Meus Agendamentos
-                            </h3>
-                            
-                            <div className="flex items-center gap-4">
-                                <span className="text-xs text-base-content/60">
-                                    {agendamentosFiltrados.length} de {agendamentos.length} agendamentos
-                                </span>
-                                <label className="label cursor-pointer gap-2">
-                                    <span className="label-text text-sm">Apenas ativos</span>
-                                    <input
-                                        type="checkbox"
-                                        className="toggle toggle-primary toggle-sm"
-                                        checked={mostrarApenasAtivos}
-                                        onChange={(e) => setMostrarApenasAtivos(e.target.checked)}
-                                    />
-                                </label>
-                            </div>
-                        </div>
-                        
-                        {loadingAgendamentos ? (
-                            <div className="flex justify-center items-center h-32">
-                                <span className="loading loading-spinner loading-lg"></span>
-                            </div>
-                        ) : agendamentosFiltrados.length === 0 ? (
-                            <div className="text-center py-8 text-base-content/70">
-                                <Calendar className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                                <p>Nenhum agendamento encontrado</p>
-                                <p className="text-sm">
-                                    {mostrarApenasAtivos 
-                                        ? 'Não há agendamentos ativos ou agendados'
-                                        : 'Crie seu primeiro agendamento usando o formulário ao lado'
-                                    }
-                                </p>
-                            </div>
-                        ) : (
-                            <div className="space-y-4 max-h-96 overflow-y-auto">
-                                {agendamentosFiltrados.map((agendamento) => (
-                                    <div key={agendamento.agendamentoId} className="card bg-base-200 shadow-sm">
-                                        <div className="card-body p-4">
-                                            <div className="flex justify-between items-start mb-2">
-                                                <h4 className="font-medium">{agendamento.nomeFantasia}</h4>
-                                                {getStatusBadge(agendamento.status, agendamento.agendamentoId)}
-                                            </div>
-                                            
-                                            <div className="space-y-2 text-sm">
-                                                <div className="flex items-center gap-2">
-                                                    <MapPin className="h-4 w-4 text-primary" />
-                                                    <span>Setor: {getNomeSetor(agendamento.setor?.id || 0)}</span>
-                                                </div>
-                                                
-                                                <div className="flex items-center gap-2">
-                                                    <Clock className="h-4 w-4 text-primary" />
-                                                    <span>
-                                                        {formatarDataHora(agendamento.dataInicio)} - {formatarDataHora(agendamento.dataFim)}
-                                                    </span>
-                                                </div>
-                                                
-                                                {agendamento.observacoes && (
-                                                    <div className="flex items-start gap-2">
-                                                        <Eye className="h-4 w-4 text-primary mt-0.5" />
-                                                        <span className="text-base-content/70">
-                                                            {agendamento.observacoes}
-                                                        </span>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
+                    <ReservasList reservas={reservasMock} />
                 )}
             </div>
         </div>
